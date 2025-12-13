@@ -6,7 +6,7 @@
 	"skills": [
 		{
 			"name": "Next.js",
-			"color": "#000000"
+			"color": "#e9ff42"
 		},
 		{
 			"name": "React",
@@ -26,7 +26,7 @@
 		},
 		{
 			"name": "Github API",
-			"color": "#181717"
+			"color": "#ff7a7a"
 		},
 		{
 			"name": "Node.js",
@@ -35,6 +35,22 @@
 		{
 			"name": "JavaScript",
 			"color": "#F7DF1E"
+		},
+		{
+			"name": "C++",
+			"color": "#3178C6"
+		},
+		{
+			"name": "Rust",
+			"color": "#66ff00"
+		},
+		{
+			"name": "Go",
+			"color": "#ff0000"
+		},
+		{
+			"name": "PHP",
+			"color": "#00ffaa"
 		}
 	]
 }
