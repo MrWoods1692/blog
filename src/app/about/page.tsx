@@ -124,12 +124,16 @@ export default function Page() {
 								{data.skills && data.skills.length > 0 && (
 									<div className='mt-12'>
 										<h2 className='mb-6 text-center text-2xl font-bold'>技能标签</h2>
-										<div className='flex flex-wrap items-center justify-center gap-3'>
+										<div className='flex flex-wrap items-center justify-center gap-4'>
 											{data.skills.map(skill => (
 												<div
 													key={skill.name}
-													className='card px-4 py-2 text-sm font-medium'
-													style={{ borderColor: skill.color + '40', color: skill.color }}>
+													className='card rounded-full px-5 py-2.5 text-sm font-medium shadow-sm'
+													style={{
+														borderColor: skill.color + '40',
+														color: skill.color,
+														backgroundColor: skill.color + '08'
+													}}>
 													{skill.name}
 												</div>
 											))}
@@ -231,7 +235,7 @@ export default function Page() {
 							{data.skills && data.skills.length > 0 && (
 								<motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className='mt-12'>
 									<h2 className='mb-6 text-center text-2xl font-bold'>技能标签</h2>
-									<div className='flex flex-wrap items-center justify-center gap-3'>
+									<div className='flex flex-wrap items-center justify-center gap-4'>
 										{data.skills.map((skill, index) => (
 											<motion.div
 												key={skill.name}
@@ -239,8 +243,12 @@ export default function Page() {
 												animate={{ opacity: 1, scale: 1 }}
 												transition={{ delay: 0.3 + index * 0.05 }}
 												whileHover={{ scale: 1.1, y: -2 }}
-												className='card px-4 py-2 text-sm font-medium transition-shadow hover:shadow-lg'
-												style={{ borderColor: skill.color + '40', color: skill.color }}>
+												className='card rounded-full px-5 py-2.5 text-sm font-medium shadow-sm transition-all hover:shadow-md'
+												style={{
+													borderColor: skill.color + '40',
+													color: skill.color,
+													backgroundColor: skill.color + '08'
+												}}>
 												{skill.name}
 											</motion.div>
 										))}
