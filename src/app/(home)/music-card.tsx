@@ -130,14 +130,15 @@ export default function MusicCard() {
 			setTimeout(loadAndPlay, NEXT_DELAY)
 		})
 
-		const timer = setTimeout(loadAndPlay, 2000)
+		// 自动播放已关闭，点击播放按钮手动开始
+		// const timer = setTimeout(loadAndPlay, 2000)
 
 		window.addEventListener('mouseup', () => {
 			draggingRef.current = false
 		})
 
 		return () => {
-			clearTimeout(timer)
+			// clearTimeout(timer)
 			audio.pause()
 		}
 	}, [])
