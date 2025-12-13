@@ -38,13 +38,14 @@ export default function MusicCard() {
 	const [duration, setDuration] = useState(0)
 	const [currentTime, setCurrentTime] = useState(0)
 
-	const loadRandomMusic = async () => {
+	/** 请求随机音乐并播放 */
+	const loadAndPlay = async () => {
 		const res = await fetch(API_URL)
 		const json = await res.json()
 		const data = json?.data
-		if (!data?.audiosrc) return
+		if (!data?.audiosrc || !audioRef.current) return
 
-		const audio = audioRef.current!
+		const audio = audioRef.current
 		audio.src = data.audiosrc
 		audio.load()
 
@@ -55,18 +56,22 @@ export default function MusicCard() {
 		setIsPlaying(true)
 	}
 
+	/** 播放 / 暂停切换 */
 	const togglePlay = async () => {
-		const audio = audioRef.current!
-		if (audio.paused) {
-			await audio.play()
-			setIsPlaying(true)
-		} else {
+		const audio = audioRef.current
+		if (!audio) return
+
+		if (isPlaying) {
 			audio.pause()
 			setIsPlaying(false)
 			setTitle('音乐')
+		} else {
+			await audio.play()
+			setIsPlaying(true)
 		}
 	}
 
+	/** 初始化 Audio */
 	useEffect(() => {
 		const audio = new Audio()
 		audioRef.current = audio
@@ -79,33 +84,44 @@ export default function MusicCard() {
 			setCurrentTime(audio.currentTime)
 		})
 
-		audio.addEventListener('ended', loadRandomMusic)
+		audio.addEventListener('ended', () => {
+			setIsPlaying(false)
+			loadAndPlay()
+		})
 
-		setTimeout(loadRandomMusic, 2000)
+		// 打开页面 2 秒后自动播放
+		const timer = setTimeout(loadAndPlay, 2000)
 
-		return () => audio.pause()
+		return () => {
+			clearTimeout(timer)
+			audio.pause()
+		}
 	}, [])
+
+	const progress = duration ? (currentTime / duration) * 100 : 0
 
 	return (
 		<HomeDraggableLayer cardKey="musicCard" x={x} y={y} width={styles.width} height={styles.height}>
-			<Card className="flex items-center gap-3" width={styles.width} height={styles.height}>
+			<Card
+				order={styles.order}
+				width={styles.width}
+				height={styles.height}
+				x={x}
+				y={y}
+				className="flex items-center gap-3"
+			>
 				<MusicSVG className="h-8 w-8" />
 
 				<div className="flex-1">
-					<div className="text-secondary text-sm truncate">{title}</div>
-
-					<input
-						type="range"
-						min={0}
-						max={duration}
-						value={currentTime}
-						onChange={e => {
-							const t = Number(e.target.value)
-							audioRef.current!.currentTime = t
-							setCurrentTime(t)
-						}}
-						className="mt-1 w-full"
-					/>
+					<div className="text-secondary text-sm truncate">
+						{title}
+					</div>
+					<div className="mt-1 h-2 rounded-full bg-white/60 overflow-hidden">
+						<div
+							className="bg-linear h-full rounded-full transition-[width]"
+							style={{ width: `${progress}%` }}
+						/>
+					</div>
 				</div>
 
 				<button
@@ -114,8 +130,8 @@ export default function MusicCard() {
 				>
 					{isPlaying ? (
 						<div className="flex gap-1">
-							<span className="h-4 w-1 bg-brand rounded" />
-							<span className="h-4 w-1 bg-brand rounded" />
+							<span className="h-4 w-1 rounded bg-brand" />
+							<span className="h-4 w-1 rounded bg-brand" />
 						</div>
 					) : (
 						<PlaySVG className="ml-1 h-4 w-4 text-brand" />
