@@ -8,6 +8,7 @@ import PlaySVG from '@/svgs/play.svg'
 import { HomeDraggableLayer } from './home-draggable-layer'
 
 const API_URL = 'https://api.milorapart.top/apis/random'
+const NEXT_DELAY = 800 // 播放结束后延迟拉取，避免死循环
 
 export default function MusicCard() {
 	const center = useCenterStore()
@@ -32,34 +33,50 @@ export default function MusicCard() {
 			  CARD_SPACING
 
 	const audioRef = useRef<HTMLAudioElement | null>(null)
+	const loadingRef = useRef(false)
 
 	const [title, setTitle] = useState('音乐')
 	const [isPlaying, setIsPlaying] = useState(false)
+	const [isLoading, setIsLoading] = useState(false)
 	const [duration, setDuration] = useState(0)
 	const [currentTime, setCurrentTime] = useState(0)
 
-	/** 请求随机音乐并播放 */
+	/** 拉取并播放随机音乐（防并发） */
 	const loadAndPlay = async () => {
-		const res = await fetch(API_URL)
-		const json = await res.json()
-		const data = json?.data
-		if (!data?.audiosrc || !audioRef.current) return
+		if (loadingRef.current || !audioRef.current) return
 
-		const audio = audioRef.current
-		audio.src = data.audiosrc
-		audio.load()
+		loadingRef.current = true
+		setIsLoading(true)
+		setIsPlaying(false)
 
-		setTitle(data.lyrics?.split('\n')[0] || '随机音乐')
-		setCurrentTime(0)
+		try {
+			const res = await fetch(API_URL)
+			const json = await res.json()
+			const data = json?.data
+			if (!data?.audiosrc) return
 
-		await audio.play()
-		setIsPlaying(true)
+			const audio = audioRef.current
+			audio.src = data.audiosrc
+			audio.load()
+
+			setTitle(data.nickname || '随机音乐')
+			setCurrentTime(0)
+
+			await audio.play()
+			setIsPlaying(true)
+		} catch (err) {
+			console.error('音乐加载失败', err)
+		} finally {
+			setIsLoading(false)
+			loadingRef.current = false
+		}
 	}
 
-	/** 播放 / 暂停切换 */
+	/** 播放 / 暂停 */
 	const togglePlay = async () => {
+		if (isLoading || !audioRef.current) return
+
 		const audio = audioRef.current
-		if (!audio) return
 
 		if (isPlaying) {
 			audio.pause()
@@ -86,7 +103,7 @@ export default function MusicCard() {
 
 		audio.addEventListener('ended', () => {
 			setIsPlaying(false)
-			loadAndPlay()
+			setTimeout(loadAndPlay, NEXT_DELAY)
 		})
 
 		// 打开页面 2 秒后自动播放
@@ -114,8 +131,10 @@ export default function MusicCard() {
 
 				<div className="flex-1">
 					<div className="text-secondary text-sm truncate">
-						{title}
+						{isLoading ? '加载中…' : title}
 					</div>
+
+					{/* 原进度条结构，未改 */}
 					<div className="mt-1 h-2 rounded-full bg-white/60 overflow-hidden">
 						<div
 							className="bg-linear h-full rounded-full transition-[width]"
@@ -126,7 +145,8 @@ export default function MusicCard() {
 
 				<button
 					onClick={togglePlay}
-					className="flex h-10 w-10 items-center justify-center rounded-full bg-white"
+					disabled={isLoading}
+					className="flex h-10 w-10 items-center justify-center rounded-full bg-white disabled:opacity-50"
 				>
 					{isPlaying ? (
 						<div className="flex gap-1">
