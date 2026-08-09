@@ -89,7 +89,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, nextTick } from 'vue'
+import { ref, computed, watch, nextTick, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useData } from '~/composables/useData'
 import { useLang } from '~/composables/useLang'
@@ -356,12 +356,15 @@ const addExternalLinkConfirm = () => {
   })
 }
 
-watch(renderedContent, () => {
-  if (typeof window === 'undefined') return
-  addCopyButtons()
-  addImageClickHandlers()
-  addExternalLinkConfirm()
-}, { immediate: true })
+onMounted(() => {
+  nextTick(() => {
+    addCopyButtons()
+    addImageClickHandlers()
+    addExternalLinkConfirm()
+    extractToc()
+    initScrollSpy()
+  })
+})
 
 // 目录
 const tocItems = ref<{ id: string; text: string; level: number }[]>([])
@@ -409,14 +412,6 @@ const initScrollSpy = () => {
   window.addEventListener('scroll', scrollHandler, { passive: true })
   scrollHandler()
 }
-
-watch(renderedContent, () => {
-  if (typeof window === 'undefined') return
-  nextTick(() => {
-    extractToc()
-    initScrollSpy()
-  })
-}, { immediate: true })
 </script>
 
 <style scoped>
