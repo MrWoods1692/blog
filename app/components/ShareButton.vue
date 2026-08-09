@@ -6,7 +6,7 @@
       <span class="font-medium">{{ t('share.title') }}</span>
     </button>
 
-    <div v-if="showMenu" class="absolute right-0 top-full mt-2 w-52 bg-white dark:bg-gray-900 rounded-xl shadow-xl border border-gray-200 dark:border-gray-800 py-2 z-50"
+    <div v-if="showMenu" class="absolute left-0 top-full mt-2 w-52 bg-white dark:bg-gray-900 rounded-xl shadow-xl border border-gray-200 dark:border-gray-800 py-2 z-50"
       @click="showMenu = false">
       <button @click="shareTo('twitter')" class="flex items-center gap-2 w-full px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
         <Icon name="lucide:twitter" class="w-4 h-4" />
