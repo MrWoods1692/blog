@@ -12,17 +12,7 @@
     </h3>
 
     <!-- Utterances Comment Widget -->
-    <div id="utterances-comments" class="utterances-container">
-      <div class="flex items-center justify-center py-8 text-gray-400">
-        <Icon name="lucide:loader-2" class="w-6 h-6 animate-spin mr-2" />
-        <span>{{ t('comments.loading') }}</span>
-      </div>
-    </div>
-  </div>
-</template>
-
-<script setup lang="ts">
-import { onMounted } from 'vue'
+    <div id="utterances-comments" class="utterances-container">rt { onMounted } from 'vue'
 import { useRuntimeConfig } from '#app'
 import { useLang } from '~/composables/useLang'
 
