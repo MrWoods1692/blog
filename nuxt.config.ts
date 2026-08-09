@@ -86,8 +86,7 @@ export default defineNuxtConfig({
       githubRepo: process.env.GITHUB_REPO || 'your-username/your-repo',
       utterancesRepo: process.env.UTTERANCES_REPO || 'your-username/your-repo',
       utterancesIssueTerm: process.env.UTTERANCES_ISSUE_TERM || 'pathname',
-      utterancesTheme: process.env.UTTERANCES_THEME || 'github-light',
-      firebaseDatabaseURL: process.env.FIREBASE_DATABASE_URL || ''
+      utterancesTheme: process.env.UTTERANCES_THEME || 'github-light'
     }
   }
 })
