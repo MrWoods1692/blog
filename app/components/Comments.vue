@@ -62,8 +62,9 @@ onMounted(() => {
     const container = document.getElementById('utterances-comments')
     if (container) {
       container.innerHTML = `
-        <div class="flex items-center justify-center py-8 text-gray-400 text-sm">
+        <div class="flex flex-col items-center justify-center py-8 text-gray-400 text-sm gap-2">
           <span>${t('comments.error')}</span>
+          <span class="text-xs text-gray-300 dark:text-gray-600">${t('comments.installHint')}</span>
         </div>
       `
     }
