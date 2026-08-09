@@ -2,9 +2,88 @@
   "id": "hello-world",
   "title": "Hello World",
   "summary": "Welcome to Woods'Blog. This is my first blog post, introducing the features, tech stack, and design philosophy of this blog.",
-  "date": "2026-08-01",
+  "date": "2026-08-09",
   "tags": ["Getting Started", "Essay", "Introduction"],
   "category": "Essay",
   "readTime": "5 min",
-  "content": "# Hello World\n\nWelcome to **Woods'Blog**! 🎉\n\nThis is my first blog post. The reason for creating this blog is simple — **record** and **share**. Here, I'll share tech articles, life reflections, and daily musings.\n\n---\n\n## Why Write a Blog\n\nWriting a blog means a few things to me:\n\n1. **Knowledge Retention** — Write down what you learn to deepen understanding and make it easy to revisit later\n2. **Help Others** — Your experience might help someone facing the same problem\n3. **Improve Expression** — Writing is an extension of thinking; writing clearly means thinking clearly\n4. **Leave a Trace** — Words on the internet are proof that you existed\n\n---\n\n## What This Blog Has\n\n### 📝 Posts\n\nTech articles and life essays covering frontend development, tools, learning notes, and more. Each post supports Markdown rendering with code highlighting, tables, blockquotes, and more.\n\n### 💬 Moments\n\nShort daily notes similar to social media posts, supporting text and images. When I don't feel like writing a long article, I record my thoughts here.\n\n### 🔍 Search\n\nReal-time search across post titles, content, and tags to quickly find what interests you.\n\n### 🏷️ Tags & Archive\n\nPosts are organized by tags and can also be browsed by year, making it easy to look back at older content.\n\n### 💬 Comments\n\nA comment system based on GitHub Issues (Utterances), no backend server required.\n\n### 🌙 Dark Mode\n\nLight/dark theme toggle that follows your system preference or can be switched manually.\n\n### 🌐 Multi-language\n\nSupports both Chinese and English with synchronized content.\n\n---\n\n## Tech Stack\n\nThis blog is built entirely with frontend technologies as a pure static site:\n\n| Tech | Purpose |\n|------|------|\n| [Nuxt 3](https://nuxt.com/) | Universal framework with SSR and static generation |\n| [Vue 3](https://vuejs.org/) | Reactive UI framework |\n| [Tailwind CSS](https://tailwindcss.com/) | Utility-first CSS for rapid UI development |\n| [Markdown-it](https://github.com/markdown-it/markdown-it) | Markdown parsing and rendering |\n| [Utterances](https://utteranc.es/) | GitHub Issues based comment system |\n| [Cloudflare Pages](https://pages.cloudflare.com/) | Static site hosting and deployment |\n\n### Architecture Highlights\n\n- **Pure Static** — All content stored as JSON files, built into static HTML at build time, no database needed\n- **SSG** — Uses Nuxt 3's `nuxt generate` to produce static files for simple deployment\n- **Responsive Design** — Built with Tailwind CSS, works on desktop and mobile\n- **Internationalization** — Chinese and English content stored separately, loaded at runtime by language\n\n---\n\n## Open Source\n\nThis blog is open source, with the code hosted on GitHub. If you're interested in how it works, feel free to check out the source code or submit an issue.\n\n---\n\n*Thanks for reading, looking forward to your feedback!*"
+  "content": "# Hello World
+
+Welcome to **Woods' Blog**! 🎉
+
+This is my very first post on this blog. The original idea behind creating it is simple—**to record** and **to share**. Here, I'll post technical articles, life reflections, and some daily musings (no pure fluff, though—for that, go check out my QQ Zone).
+
+---
+
+## Why Blog?
+
+Ah, that's a question worth pondering. For me, blogging serves several purposes:
+
+1. **Knowledge consolidation** — Writing down what I learn deepens my understanding and makes it easier to revisit later, even though we all use AI assistants nowadays.
+2. **Helping others** — Maybe my experience can save someone else from the same pitfalls.
+3. **Sharpening communication** — Writing is an extension of thinking; you can't write clearly unless you think clearly. Also, my Chinese composition skills are pretty weak, so this is good practice.
+4. **Leaving a trace** — Words on the internet are proof that you existed.
+
+---
+
+## What's on This Blog?
+
+### 📝 Articles
+
+Technical posts and casual essays covering programming, tools, study notes, and more. Every article supports Markdown rendering, including code blocks, tables, blockquotes, links, and other formatting.
+
+### 💬 Statuses
+
+Short, daily updates similar to QQ Zone posts, supporting both text and images. When I don't feel like writing a full article, I'll just drop a quick note about my current mood here.
+
+### 🔍 Search
+
+Real‑time search across article titles, content, and tags, so you can quickly find what interests you.
+
+### 🏷️ Tags & Archives
+
+Articles are categorized by tags and also archived by year, making it easy to browse past content.
+
+### 💬 Comments
+
+A comment system powered by GitHub Issues (via Utterances). No backend service needed—since this project is fully frontend, I didn't want to pay for a server.
+
+### 🌙 Dark Mode
+
+Supports light/dark theme switching, following your system preference or manual toggle, to protect your eyes.
+
+### 🌐 Multi‑language
+
+Supports both Chinese and English, with content maintained in sync.
+
+---
+
+## Tech Stack
+
+This blog is built entirely with frontend technologies and is a purely static site:
+
+| Technology | Purpose |
+|------------|---------|
+| [Nuxt 3](https://nuxt.com/) | Universal framework with SSR and static generation support |
+| [Vue 3](https://vuejs.org/) | Reactive UI framework |
+| [Tailwind CSS](https://tailwindcss.com/) | Utility‑first CSS for rapid UI development |
+| [Markdown-it](https://github.com/markdown-it/markdown-it) | Markdown parsing and rendering |
+| [Utterances](https://utteranc.es/) | Comment system based on GitHub Issues |
+| [Cloudflare Pages](https://pages.cloudflare.com/) | Static site hosting and deployment |
+
+### Architecture Highlights
+
+- **Fully static** — All content is stored as JSON files and compiled into static HTML at build time. No database required.
+- **SSG (Static Site Generation)** — Uses Nuxt 3's `nuxt generate` to produce static files for easy deployment.
+- **Responsive design** — Built with Tailwind CSS, works well on both desktop and mobile.
+- **Internationalization** — Chinese and English content are stored separately and loaded at runtime based on language preference.
+
+---
+
+## Open Source
+
+This blog is open source, with the code hosted on GitHub. If you're curious about the implementation details, feel free to browse the source code or submit an issue. Repository: [GitHub](https://github.com/MrWoods1692/blog).
+
+---
+
+*Thanks for reading—I look forward to connecting with you!*"
 }
