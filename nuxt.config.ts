@@ -46,6 +46,14 @@ export default defineNuxtConfig({
     prerender: {
       routes: ['/']
     },
+    cloudflare: {
+      pages: {
+        routes: {
+          include: ['/*'],
+          exclude: ['/_nuxt/*', '/_payload.json', '/assets/*', '/favicon.ico', '/robots.txt']
+        }
+      }
+    },
     rollupConfig: {
       watch: {
         ignored: ['**/node_modules/**', '**/.git/**', '**/.output/**']
