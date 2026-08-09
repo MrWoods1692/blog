@@ -99,6 +99,7 @@ import { useRoute } from 'vue-router'
 import { useData } from '~/composables/useData'
 import { useLang } from '~/composables/useLang'
 import { useMarkdown } from '~/composables/useMarkdown'
+import { useLike } from '~/composables/useLike'
 import Comments from '~/components/Comments.vue'
 import ShareButton from '~/components/ShareButton.vue'
 import ImageViewer from '~/components/ImageViewer.vue'
@@ -110,8 +111,7 @@ const { render } = useMarkdown()
 
 const postId = route.params.id as string
 const post = computed(() => posts.value.find(p => p.id === postId))
-const liked = ref(false)
-const likeCount = ref(0)
+const { liked, likeCount, toggleLike } = useLike(postId)
 const isTyping = ref(false)
 const typedChars = ref<string[]>([])
 let generation = 0
@@ -369,10 +369,6 @@ watch(renderedContent, () => {
   addImageClickHandlers()
   addExternalLinkConfirm()
 }, { immediate: true })
-
-const toggleLike = () => {
-  liked.value = !liked.value
-}
 
 // 目录
 const tocItems = ref<{ id: string; text: string; level: number }[]>([])
