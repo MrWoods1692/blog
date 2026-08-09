@@ -52,15 +52,8 @@
                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-1 line-clamp-2">{{ displaySummary(post) }}</p>
                 <div class="flex items-center gap-3 mt-2">
                   <span class="text-xs text-gray-900 dark:text-gray-100 flex items-center gap-1">
-                    <Icon name="lucide:clock" class="w-3 h-3" />
+                    <Icon name="lucide:calendar" class="w-3 h-3" />
                     {{ post.date }}
-                  </span>
-                  <span class="text-xs text-gray-600 dark:text-gray-300 flex items-center gap-1">
-                    <Icon name="lucide:book-open" class="w-3 h-3" />
-                    {{ displayReadTime(post) }}
-                  </span>
-                  <span class="text-xs px-2 py-0.5 bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 rounded-full">
-                    {{ post.category }}
                   </span>
                 </div>
               </div>
@@ -83,7 +76,6 @@ const { lang, t } = useLang()
 
 const displayTitle = (post: any) => post.title
 const displaySummary = (post: any) => post.summary
-const displayReadTime = (post: any) => post.readTime
 
 useHead({
   title: "Woods'Blog - 归档",
