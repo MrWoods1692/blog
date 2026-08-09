@@ -77,11 +77,9 @@
     <div class="border-t border-gray-200 dark:border-gray-800 pt-8 mb-8">
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-2">
-          <button @click="toggleLike" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-red-300 dark:hover:border-red-700 transition-colors"
-            :class="liked ? 'text-red-500 border-red-300 dark:border-red-700' : 'text-gray-500 dark:text-gray-400'">
-            <Icon :name="liked ? 'lucide:heart' : 'lucide:heart'" class="w-5 h-5" :class="{ 'fill-red-500': liked }" />
-            <span class="font-medium">{{ likeCount + (liked ? 1 : 0) }}</span>
-          </button>
+          <ClientOnly>
+            <LikeButton :postId="post.id" />
+          </ClientOnly>
           <ShareButton :title="displayTitle" :url="shareUrl" :summary="displaySummary" />
         </div>
       </div>
@@ -99,10 +97,10 @@ import { useRoute } from 'vue-router'
 import { useData } from '~/composables/useData'
 import { useLang } from '~/composables/useLang'
 import { useMarkdown } from '~/composables/useMarkdown'
-import { useLike } from '~/composables/useLike'
 import Comments from '~/components/Comments.vue'
 import ShareButton from '~/components/ShareButton.vue'
 import ImageViewer from '~/components/ImageViewer.vue'
+import LikeButton from '~/components/LikeButton.vue'
 
 const route = useRoute()
 const { posts } = useData()
@@ -111,7 +109,6 @@ const { render } = useMarkdown()
 
 const postId = route.params.id as string
 const post = computed(() => posts.value.find(p => p.id === postId))
-const { liked, likeCount, toggleLike } = useLike(postId)
 const isTyping = ref(false)
 const typedChars = ref<string[]>([])
 let generation = 0
