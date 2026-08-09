@@ -366,7 +366,7 @@ watch(renderedContent, () => {
 // 目录
 const tocItems = ref<{ id: string; text: string; level: number }[]>([])
 const activeTocId = ref('')
-let observer: IntersectionObserver | null = null
+let scrollHandler: (() => void) | null = null
 
 const extractToc = () => {
   if (typeof window === 'undefined') return
@@ -385,19 +385,29 @@ const initScrollSpy = () => {
   const article = document.querySelector('.article-content')
   if (!article) return
 
-  if (observer) observer.disconnect()
+  if (scrollHandler) {
+    window.removeEventListener('scroll', scrollHandler)
+  }
 
   const headings = article.querySelectorAll('h2, h3')
   if (headings.length === 0) return
 
-  observer = new IntersectionObserver((entries) => {
-    const visible = entries.filter(e => e.isIntersecting)
-    if (visible.length === 0) return
-    visible.sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)
-    activeTocId.value = visible[0].target.id
-  }, { rootMargin: '-80px 0px -80% 0px', threshold: [0, 0.2] })
+  scrollHandler = () => {
+    const offset = 120
+    let currentId = ''
+    for (const h of headings) {
+      const rect = h.getBoundingClientRect()
+      if (rect.top <= offset) {
+        currentId = h.id
+      } else {
+        break
+      }
+    }
+    activeTocId.value = currentId
+  }
 
-  headings.forEach(h => observer!.observe(h))
+  window.addEventListener('scroll', scrollHandler, { passive: true })
+  scrollHandler()
 }
 
 watch(renderedContent, () => {
