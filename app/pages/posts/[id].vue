@@ -77,9 +77,7 @@
     <div class="border-t border-gray-200 dark:border-gray-800 pt-8 mb-8">
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-2">
-          <ClientOnly>
-            <LikeButton :postId="post.id" />
-          </ClientOnly>
+          <LikeButton :postId="post.id" />
           <ShareButton :title="displayTitle" :url="shareUrl" :summary="displaySummary" />
         </div>
       </div>
@@ -100,7 +98,7 @@ import { useMarkdown } from '~/composables/useMarkdown'
 import Comments from '~/components/Comments.vue'
 import ShareButton from '~/components/ShareButton.vue'
 import ImageViewer from '~/components/ImageViewer.vue'
-import LikeButton from '~/components/LikeButton.vue'
+import LikeButton from '~/components/LikeButton.client.vue'
 
 const route = useRoute()
 const { posts } = useData()
