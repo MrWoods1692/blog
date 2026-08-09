@@ -8,14 +8,68 @@ const MOMENTS_PER_PAGE = 20
 const zhMomentsFiles = import.meta.glob<{ default: any[] }>('../../content/moments/zh/page-*.json', { eager: true })
 const enMomentsFiles = import.meta.glob<{ default: any[] }>('../../content/moments/en/page-*.json', { eager: true })
 
-// 使用 import.meta.glob 在构建时加载所有文章文件
-const zhPostsFiles = import.meta.glob<{ default: any }>('../../content/posts/zh/*.json', { eager: true })
-const enPostsFiles = import.meta.glob<{ default: any }>('../../content/posts/en/*.json', { eager: true })
+// 使用 import.meta.glob 在构建时加载所有文章 Markdown 文件（?raw 以原始字符串方式加载）
+const zhPostsFiles = import.meta.glob<string>('../../content/posts/zh/*.md?raw', { eager: true })
+const enPostsFiles = import.meta.glob<string>('../../content/posts/en/*.md?raw', { eager: true })
+
+/**
+ * 解析 Markdown 文件中的 YAML frontmatter
+ * 格式: ---\nkey: value\n---\n正文内容
+ */
+let currentListKey: string | null = null
+const parseFrontmatter = (raw: string) => {
+  currentListKey = null
+  const match = raw.match(/^---\s*\n([\s\S]*?)\n---\s*\n?([\s\S]*)$/)
+  if (!match) return { meta: {}, content: raw }
+
+  const meta: Record<string, any> = {}
+  const content = match[2]
+
+  match[1].split('\n').forEach(line => {
+    // 跳过空行
+    if (!line.trim()) return
+
+    // 列表项 (tags: 下的 - item)
+    const listMatch = line.match(/^\s+-\s+(.+)$/)
+    if (listMatch) {
+      // 找到当前正在解析的列表键
+      if (currentListKey) {
+        if (!meta[currentListKey]) meta[currentListKey] = []
+        meta[currentListKey].push(listMatch[1].trim())
+      }
+      return
+    }
+
+    // 普通键值对
+    const kvMatch = line.match(/^([\w]+):\s*(.*)$/)
+    if (kvMatch) {
+      const key = kvMatch[1]
+      const val = kvMatch[2].trim()
+      if (val === '') {
+        // 空值，可能是列表的开头
+        currentListKey = key
+      } else {
+        // 非空值，重置列表键
+        currentListKey = null
+        // 尝试解析为数字或布尔值
+        if (/^\d+$/.test(val)) meta[key] = parseInt(val)
+        else if (val === 'true') meta[key] = true
+        else if (val === 'false') meta[key] = false
+        else meta[key] = val
+      }
+    }
+  })
+
+  return { meta, content }
+}
 
 // 加载所有文章
 const loadAllPosts = (locale: 'zh' | 'en'): any[] => {
   const files = locale === 'zh' ? zhPostsFiles : enPostsFiles
-  return Object.values(files).map(mod => mod.default || {})
+  return Object.values(files).map(raw => {
+    const { meta, content } = parseFrontmatter(raw || '')
+    return { ...meta, content }
+  })
 }
 
 // 合并所有页面的说说

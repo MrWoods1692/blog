@@ -1,12 +1,17 @@
-{
-  "id": "hello-world",
-  "title": "Hello World",
-  "summary": "Welcome to Woods'Blog. This is my first blog post, introducing the features, tech stack, and design philosophy of this blog.",
-  "date": "2026-08-09",
-  "tags": ["Getting Started", "Essay", "Introduction"],
-  "category": "Essay",
-  "readTime": "5 min",
-  "content": "# Hello World
+---
+id: hello-world
+title: Hello World
+summary: Welcome to Woods'Blog. This is my first blog post, introducing the features, tech stack, and design philosophy of this blog.
+date: 2026-08-09
+tags:
+  - Getting Started
+  - Essay
+  - Introduction
+category: Essay
+readTime: 5 min
+---
+
+# Hello World
 
 Welcome to **Woods' Blog**! 🎉
 
@@ -72,7 +77,7 @@ This blog is built entirely with frontend technologies and is a purely static si
 
 ### Architecture Highlights
 
-- **Fully static** — All content is stored as JSON files and compiled into static HTML at build time. No database required.
+- **Fully static** — All content is stored as Markdown files and compiled into static HTML at build time. No database required.
 - **SSG (Static Site Generation)** — Uses Nuxt 3's `nuxt generate` to produce static files for easy deployment.
 - **Responsive design** — Built with Tailwind CSS, works well on both desktop and mobile.
 - **Internationalization** — Chinese and English content are stored separately and loaded at runtime based on language preference.
@@ -85,5 +90,4 @@ This blog is open source, with the code hosted on GitHub. If you're curious abou
 
 ---
 
-*Thanks for reading—I look forward to connecting with you!*"
-}
+*Thanks for reading—I look forward to connecting with you!*
