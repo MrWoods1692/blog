@@ -73,8 +73,7 @@ export default defineNuxtConfig({
         { name: 'twitter:creator', content: '@woods' }
       ],
       link: [
-        { rel: 'icon', type: 'image/png', href: '/logo_light.png', media: '(prefers-color-scheme: light)' },
-        { rel: 'icon', type: 'image/png', href: '/logo_dark.png', media: '(prefers-color-scheme: dark)' },
+        { rel: 'icon', type: 'image/png', href: '/logo_light.png' },
         { rel: 'apple-touch-icon', href: '/logo_light.png' },
         { rel: 'canonical', href: 'https://woods.blog' }
       ]
