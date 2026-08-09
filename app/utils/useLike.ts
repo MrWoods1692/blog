@@ -1,77 +1,35 @@
-import { ref, onMounted, onUnmounted } from 'vue'
-
-let app: any = null
-let db: any = null
-
-async function getFirebaseDB() {
-  const runtimeConfig = useRuntimeConfig()
-  const firebaseConfig = {
-    apiKey: runtimeConfig.public.firebaseApiKey,
-    authDomain: runtimeConfig.public.firebaseAuthDomain,
-    databaseURL: runtimeConfig.public.firebaseDatabaseURL,
-    projectId: runtimeConfig.public.firebaseProjectId,
-    storageBucket: runtimeConfig.public.firebaseStorageBucket,
-    messagingSenderId: runtimeConfig.public.firebaseMessagingSenderId,
-    appId: runtimeConfig.public.firebaseAppId
-  }
-
-  if (!app) {
-    const { initializeApp } = await import('firebase/app')
-    app = initializeApp(firebaseConfig)
-  }
-  if (!db) {
-    const { getDatabase } = await import('firebase/database')
-    db = getDatabase(app)
-  }
-  return db
-}
+import { ref, onMounted } from 'vue'
 
 export function useLike(postId: string) {
   const liked = ref(false)
   const likeCount = ref(0)
-  let unsubscribe: (() => void) | null = null
+  const runtimeConfig = useRuntimeConfig()
+  const databaseURL = runtimeConfig.public.firebaseDatabaseURL
 
   onMounted(async () => {
-    if (process.server) return
+    if (!databaseURL) return
     try {
-      const database = await getFirebaseDB()
-      const { ref: dbRef, onValue } = await import('firebase/database')
-      const likeRef = dbRef(database, `likes/${postId}`)
-
-      unsubscribe = onValue(likeRef, (snapshot) => {
-        const val = snapshot.val()
-        likeCount.value = val?.count || 0
-      })
+      const res = await fetch(`${databaseURL}/likes/${postId}.json`)
+      const data = await res.json()
+      likeCount.value = data?.count || 0
     } catch (e) {
-      console.error('Firebase init failed:', e)
-    }
-  })
-
-  onUnmounted(() => {
-    if (unsubscribe) {
-      unsubscribe()
+      console.error('Failed to load like count:', e)
     }
   })
 
   async function toggleLike() {
-    if (process.server) return
+    if (!databaseURL) return
     liked.value = !liked.value
     try {
-      const database = await getFirebaseDB()
-      const { ref: dbRef, runTransaction } = await import('firebase/database')
-      const likeRef = dbRef(database, `likes/${postId}`)
-
-      await runTransaction(likeRef, (current) => {
-        const data = current || { count: 0 }
-        if (liked.value) {
-          data.count = (data.count || 0) + 1
-        } else {
-          data.count = Math.max(0, (data.count || 0) - 1)
-        }
-        return data
+      const newCount = likeCount.value + (liked.value ? 1 : -1)
+      await fetch(`${databaseURL}/likes/${postId}.json`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ count: Math.max(0, newCount) })
       })
+      likeCount.value = Math.max(0, newCount)
     } catch (e) {
-      console.error('Like toggle failed:', e)
+      console.error('Failed to toggle like:', e)
       liked.value = !liked.value
     }
   }

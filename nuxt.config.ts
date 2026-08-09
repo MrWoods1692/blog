@@ -87,13 +87,7 @@ export default defineNuxtConfig({
       utterancesRepo: process.env.UTTERANCES_REPO || 'your-username/your-repo',
       utterancesIssueTerm: process.env.UTTERANCES_ISSUE_TERM || 'pathname',
       utterancesTheme: process.env.UTTERANCES_THEME || 'github-light',
-      firebaseApiKey: process.env.FIREBASE_API_KEY || '',
-      firebaseAuthDomain: process.env.FIREBASE_AUTH_DOMAIN || '',
-      firebaseDatabaseURL: process.env.FIREBASE_DATABASE_URL || '',
-      firebaseProjectId: process.env.FIREBASE_PROJECT_ID || '',
-      firebaseStorageBucket: process.env.FIREBASE_STORAGE_BUCKET || '',
-      firebaseMessagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID || '',
-      firebaseAppId: process.env.FIREBASE_APP_ID || ''
+      firebaseDatabaseURL: process.env.FIREBASE_DATABASE_URL || ''
     }
   }
 })
