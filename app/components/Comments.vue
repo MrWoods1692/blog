@@ -50,6 +50,24 @@ onMounted(() => {
     return
   }
 
+  // Global error handler to suppress Utterances DOMException
+  const errorHandler = (event: ErrorEvent) => {
+    if (event.message && event.message.includes('replaceChild')) {
+      event.preventDefault()
+      const container = document.getElementById('utterances-comments')
+      if (container) {
+        container.innerHTML = `
+          <div class="flex flex-col items-center justify-center py-8 text-gray-400 text-sm gap-2">
+            <span>${t('comments.error')}</span>
+            <span class="text-xs text-gray-300 dark:text-gray-600">${t('comments.installHint')}</span>
+          </div>
+        `
+      }
+      window.removeEventListener('error', errorHandler)
+    }
+  }
+  window.addEventListener('error', errorHandler)
+
   // Load Utterances script dynamically with error handling
   const script = document.createElement('script')
   script.src = 'https://utteranc.es/client.js'
@@ -68,6 +86,7 @@ onMounted(() => {
         </div>
       `
     }
+    window.removeEventListener('error', errorHandler)
   }
   document.getElementById('utterances-comments')?.appendChild(script)
 })
