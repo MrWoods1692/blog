@@ -357,13 +357,13 @@ const addExternalLinkConfirm = () => {
 }
 
 onMounted(() => {
-  nextTick(() => {
+  setTimeout(() => {
     addCopyButtons()
     addImageClickHandlers()
     addExternalLinkConfirm()
     extractToc()
     initScrollSpy()
-  })
+  }, 0)
 })
 
 // 目录
