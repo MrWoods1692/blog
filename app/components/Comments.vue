@@ -35,14 +35,39 @@ const { t } = useLang()
 const config = useRuntimeConfig()
 
 onMounted(() => {
-  // Load Utterances script dynamically
+  // Only load Utterances if a valid repo is configured
+  const repo = config.public.utterancesRepo
+  if (!repo || repo === 'your-username/your-repo') {
+    // Utterances not configured, hide the comment section
+    const container = document.getElementById('utterances-comments')
+    if (container) {
+      container.innerHTML = `
+        <div class="flex items-center justify-center py-8 text-gray-400 text-sm">
+          <span>${t('comments.disabled')}</span>
+        </div>
+      `
+    }
+    return
+  }
+
+  // Load Utterances script dynamically with error handling
   const script = document.createElement('script')
   script.src = 'https://utteranc.es/client.js'
-  script.setAttribute('repo', config.public.utterancesRepo)
+  script.setAttribute('repo', repo)
   script.setAttribute('issue-term', config.public.utterancesIssueTerm)
   script.setAttribute('theme', config.public.utterancesTheme)
   script.setAttribute('crossorigin', 'anonymous')
   script.setAttribute('async', '')
+  script.onerror = () => {
+    const container = document.getElementById('utterances-comments')
+    if (container) {
+      container.innerHTML = `
+        <div class="flex items-center justify-center py-8 text-gray-400 text-sm">
+          <span>${t('comments.error')}</span>
+        </div>
+      `
+    }
+  }
   document.getElementById('utterances-comments')?.appendChild(script)
 })
 </script>
