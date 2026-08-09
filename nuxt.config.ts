@@ -60,7 +60,7 @@ export default defineNuxtConfig({
       title: "Woods'Blog",
       meta: [
         { name: 'description', content: 'Woods\'Blog — 记录技术与生活' },
-        { name: 'keywords', content: 'blog, 博客, 技术, 编程, 前端, Vue, Nuxt, Tailwind CSS' },
+        { name: 'keywords', content: 'blog, 博客, 技术, 编程' },
         { name: 'author', content: 'Woods' },
         { name: 'robots', content: 'index, follow' },
         { name: 'theme-color', content: '#ffffff', media: '(prefers-color-scheme: light)' },
@@ -75,15 +75,19 @@ export default defineNuxtConfig({
       link: [
         { rel: 'icon', type: 'image/png', href: '/logo_light.png' },
         { rel: 'apple-touch-icon', href: '/logo_light.png' },
-        { rel: 'canonical', href: 'https://woods.blog' }
+        { rel: 'canonical', href: 'https://blog.mrcwoods.com' }
       ]
     }
   },
 
   runtimeConfig: {
     public: {
-      githubRepo: process.env.GITHUB_REPO || 'your-username/your-repo',
-      utterancesRepo: process.env.UTTERANCES_REPO || 'your-username/your-repo',
+      siteTitle: "Woods'Blog",
+      siteTitleZh: "Woods'Blog",
+      siteDesc: "A minimal static blog for tech and life",
+      siteDescZh: "一个极简的静态博客，记录技术与生活",
+      githubRepo: process.env.GITHUB_REPO || 'MrWoods1692/blog',
+      utterancesRepo: process.env.UTTERANCES_REPO || 'MrWoods1692/blog',
       utterancesIssueTerm: process.env.UTTERANCES_ISSUE_TERM || 'pathname',
       utterancesTheme: process.env.UTTERANCES_THEME || 'github-light'
     }

@@ -1,6 +1,6 @@
 import { ref, computed, watch } from 'vue'
-import data from '../../content/data.json'
 import { useLang } from '~/composables/useLang'
+import { useRuntimeConfig } from '#app'
 
 const MOMENTS_PER_PAGE = 20
 
@@ -50,9 +50,14 @@ const getMomentsPage = (page: number, locale: 'zh' | 'en'): any[] => {
 
 export const useData = () => {
   const { lang } = useLang()
+  const config = useRuntimeConfig()
 
-  const site = computed(() => data.site)
-  const projects = computed(() => data.projects)
+  const site = computed(() => ({
+    title: config.public.siteTitle,
+    titleZh: config.public.siteTitleZh,
+    description: config.public.siteDesc,
+    descriptionZh: config.public.siteDescZh
+  }))
 
   const locale = computed(() => (lang.value === 'zh' ? 'zh' : 'en') as 'zh' | 'en')
 
@@ -166,7 +171,6 @@ export const useData = () => {
     moments,
     momentsTotalPages,
     loadMoments,
-    projects,
     allTags,
     allCategories,
     archives,

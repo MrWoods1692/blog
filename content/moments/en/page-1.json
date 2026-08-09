@@ -3,27 +3,6 @@
     "id": 1,
     "content": "Started writing a blog today, hope to keep it up!",
     "date": "2026-08-01",
-    "likes": 5,
     "images": ["https://picsum.photos/seed/moment1/400/300", "https://picsum.photos/seed/moment1b/400/300"]
-  },
-  {
-    "id": 2,
-    "content": "Learned Nuxt 3 static generation, deploying to GitHub Pages is super easy.",
-    "date": "2026-08-03",
-    "likes": 12
-  },
-  {
-    "id": 3,
-    "content": "Tailwind CSS is really great, writing styles is twice as efficient.",
-    "date": "2026-08-05",
-    "likes": 8,
-    "images": ["https://picsum.photos/seed/moment3/400/300"]
-  },
-  {
-    "id": 4,
-    "content": "Went hiking this weekend, beautiful scenery and great mood.",
-    "date": "2026-08-07",
-    "likes": 15,
-    "images": ["https://picsum.photos/seed/moment4a/400/300", "https://picsum.photos/seed/moment4b/400/300", "https://picsum.photos/seed/moment4c/400/300"]
   }
 ]

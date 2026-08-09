@@ -1,6 +1,3 @@
 [
-  { "id": "hello-world", "date": "2026-08-01" },
-  { "id": "nuxt3-guide", "date": "2026-08-03" },
-  { "id": "tailwind-tips", "date": "2026-08-05" },
-  { "id": "life-thoughts", "date": "2026-08-07" }
+  { "id": "hello-world", "date": "2026-08-09" }
 ]
