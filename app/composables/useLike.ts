@@ -1,21 +1,20 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 
-const runtimeConfig = useRuntimeConfig()
-
-const firebaseConfig = {
-  apiKey: runtimeConfig.public.firebaseApiKey,
-  authDomain: runtimeConfig.public.firebaseAuthDomain,
-  databaseURL: runtimeConfig.public.firebaseDatabaseURL,
-  projectId: runtimeConfig.public.firebaseProjectId,
-  storageBucket: runtimeConfig.public.firebaseStorageBucket,
-  messagingSenderId: runtimeConfig.public.firebaseMessagingSenderId,
-  appId: runtimeConfig.public.firebaseAppId
-}
-
 let app: any = null
 let db: any = null
 
 async function getFirebaseDB() {
+  const runtimeConfig = useRuntimeConfig()
+  const firebaseConfig = {
+    apiKey: runtimeConfig.public.firebaseApiKey,
+    authDomain: runtimeConfig.public.firebaseAuthDomain,
+    databaseURL: runtimeConfig.public.firebaseDatabaseURL,
+    projectId: runtimeConfig.public.firebaseProjectId,
+    storageBucket: runtimeConfig.public.firebaseStorageBucket,
+    messagingSenderId: runtimeConfig.public.firebaseMessagingSenderId,
+    appId: runtimeConfig.public.firebaseAppId
+  }
+
   if (!app) {
     const { initializeApp } = await import('firebase/app')
     app = initializeApp(firebaseConfig)
@@ -33,6 +32,7 @@ export function useLike(postId: string) {
   let unsubscribe: (() => void) | null = null
 
   onMounted(async () => {
+    if (process.server) return
     try {
       const database = await getFirebaseDB()
       const { ref: dbRef, onValue } = await import('firebase/database')
@@ -54,6 +54,7 @@ export function useLike(postId: string) {
   })
 
   async function toggleLike() {
+    if (process.server) return
     liked.value = !liked.value
     try {
       const database = await getFirebaseDB()
