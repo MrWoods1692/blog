@@ -8,7 +8,7 @@
 </template>
 
 <script setup lang="ts">
-import { useLike } from '~/composables/useLike'
+import { useLike } from '~/utils/useLike'
 
 const props = defineProps<{ postId: string }>()
 const { liked, likeCount, toggleLike } = useLike(props.postId)
