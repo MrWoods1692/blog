@@ -3,37 +3,37 @@
     <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" />
 
     <!-- 操作按钮栏 -->
-    <div class="absolute top-4 left-1/2 -translate-x-1/2 flex items-center gap-1 px-2 py-1.5 rounded-xl bg-gray-900/90 backdrop-blur border border-gray-700/50 shadow-xl z-10 text-white">
-      <button @click="rotateLeft" class="p-2 rounded-lg hover:bg-gray-700/50 transition-colors" :title="t('image.rotateLeft')">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+    <div class="absolute top-3 left-1/2 -translate-x-1/2 flex items-center gap-0.5 px-1.5 py-1 rounded-xl bg-gray-900/90 backdrop-blur border border-gray-700/50 shadow-xl z-10 text-white overflow-x-auto max-w-[calc(100vw-2rem)]">
+      <button @click="rotateLeft" class="p-1.5 rounded-lg hover:bg-gray-700/50 transition-colors flex-shrink-0" :title="t('image.rotateLeft')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
       </button>
-      <button @click="rotateRight" class="p-2 rounded-lg hover:bg-gray-700/50 transition-colors" :title="t('image.rotateRight')">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.13-9.36L23 10"/></svg>
+      <button @click="rotateRight" class="p-1.5 rounded-lg hover:bg-gray-700/50 transition-colors flex-shrink-0" :title="t('image.rotateRight')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.13-9.36L23 10"/></svg>
       </button>
-      <div class="w-px h-4 bg-gray-700/50 mx-0.5" />
-      <button @click="zoomOut" class="p-2 rounded-lg hover:bg-gray-700/50 transition-colors" :title="t('image.zoomOut')">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+      <div class="w-px h-3.5 bg-gray-700/50 mx-0.5 flex-shrink-0" />
+      <button @click="zoomOut" class="p-1.5 rounded-lg hover:bg-gray-700/50 transition-colors flex-shrink-0" :title="t('image.zoomOut')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
       </button>
-      <span class="text-xs text-gray-400 px-1 min-w-[3rem] text-center font-mono">{{ Math.round(scale * 100) }}%</span>
-      <button @click="zoomIn" class="p-2 rounded-lg hover:bg-gray-700/50 transition-colors" :title="t('image.zoomIn')">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+      <span class="text-xs text-gray-400 px-0.5 min-w-[2.5rem] text-center font-mono flex-shrink-0">{{ Math.round(scale * 100) }}%</span>
+      <button @click="zoomIn" class="p-1.5 rounded-lg hover:bg-gray-700/50 transition-colors flex-shrink-0" :title="t('image.zoomIn')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
       </button>
-      <button @click="reset" class="p-2 rounded-lg hover:bg-gray-700/50 transition-colors" :title="t('image.reset')">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><rect x="9" y="9" width="6" height="6"/></svg>
+      <button @click="reset" class="p-1.5 rounded-lg hover:bg-gray-700/50 transition-colors flex-shrink-0" :title="t('image.reset')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><rect x="9" y="9" width="6" height="6"/></svg>
       </button>
-      <div class="w-px h-4 bg-gray-700/50 mx-0.5" />
-      <button @click="download" class="p-2 rounded-lg hover:bg-gray-700/50 transition-colors" :title="t('image.download')">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      <div class="w-px h-3.5 bg-gray-700/50 mx-0.5 flex-shrink-0" />
+      <button @click="download" class="p-1.5 rounded-lg hover:bg-gray-700/50 transition-colors flex-shrink-0" :title="t('image.download')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
       </button>
-      <button @click="copyLink" class="p-2 rounded-lg hover:bg-gray-700/50 transition-colors" :title="t('image.copyLink')">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+      <button @click="copyLink" class="p-1.5 rounded-lg hover:bg-gray-700/50 transition-colors flex-shrink-0" :title="t('image.copyLink')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
       </button>
-      <button @click="copyImage" class="p-2 rounded-lg hover:bg-gray-700/50 transition-colors" :title="t('image.copyImage')">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      <button @click="copyImage" class="p-1.5 rounded-lg hover:bg-gray-700/50 transition-colors flex-shrink-0" :title="t('image.copyImage')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
       </button>
-      <div class="w-px h-4 bg-gray-700/50 mx-0.5" />
-      <button @click="close" class="p-2 rounded-lg hover:bg-gray-700/50 transition-colors" :title="t('image.close')">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      <div class="w-px h-3.5 bg-gray-700/50 mx-0.5 flex-shrink-0" />
+      <button @click="close" class="p-1.5 rounded-lg hover:bg-gray-700/50 transition-colors flex-shrink-0" :title="t('image.close')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
 
