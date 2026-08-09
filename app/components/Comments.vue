@@ -11,8 +11,12 @@
       {{ t('page.comments') }}
     </h3>
 
-    <!-- Utterances Comment Widget -->
-    <div id="utterances-comments" class="utterances-container">rt { onMounted } from 'vue'
+    <div id="utterances-comments" class="utterances-container"></div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { onMounted } from 'vue'
 import { useRuntimeConfig } from '#app'
 import { useLang } from '~/composables/useLang'
 
@@ -25,10 +29,8 @@ const { t } = useLang()
 const config = useRuntimeConfig()
 
 onMounted(() => {
-  // Only load Utterances if a valid repo is configured
   const repo = config.public.utterancesRepo
   if (!repo || repo === 'your-username/your-repo') {
-    // Utterances not configured, hide the comment section
     const container = document.getElementById('utterances-comments')
     if (container) {
       container.innerHTML = `
@@ -40,7 +42,6 @@ onMounted(() => {
     return
   }
 
-  // Global error handler to suppress Utterances DOMException
   const errorHandler = (event: ErrorEvent) => {
     if (event.message && event.message.includes('replaceChild')) {
       event.preventDefault()
@@ -58,7 +59,6 @@ onMounted(() => {
   }
   window.addEventListener('error', errorHandler)
 
-  // Load Utterances script dynamically with error handling
   const script = document.createElement('script')
   script.src = 'https://utteranc.es/client.js'
   script.setAttribute('repo', repo)
