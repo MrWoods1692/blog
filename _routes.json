@@ -1,0 +1,5 @@
+{
+  "version": 1,
+  "include": ["/*"],
+  "exclude": ["/_nuxt/*", "/_payload.json", "/assets/*", "/favicon.ico", "/robots.txt"]
+}
