@@ -1,6 +1,4 @@
 import { ref, onMounted, onUnmounted } from 'vue'
-import { initializeApp } from 'firebase/app'
-import { getDatabase, ref as dbRef, runTransaction, onValue } from 'firebase/database'
 
 const runtimeConfig = useRuntimeConfig()
 
@@ -17,11 +15,13 @@ const firebaseConfig = {
 let app: any = null
 let db: any = null
 
-function getFirebaseDB() {
+async function getFirebaseDB() {
   if (!app) {
+    const { initializeApp } = await import('firebase/app')
     app = initializeApp(firebaseConfig)
   }
   if (!db) {
+    const { getDatabase } = await import('firebase/database')
     db = getDatabase(app)
   }
   return db
@@ -32,14 +32,19 @@ export function useLike(postId: string) {
   const likeCount = ref(0)
   let unsubscribe: (() => void) | null = null
 
-  onMounted(() => {
-    const database = getFirebaseDB()
-    const likeRef = dbRef(database, `likes/${postId}`)
+  onMounted(async () => {
+    try {
+      const database = await getFirebaseDB()
+      const { ref: dbRef, onValue } = await import('firebase/database')
+      const likeRef = dbRef(database, `likes/${postId}`)
 
-    unsubscribe = onValue(likeRef, (snapshot) => {
-      const val = snapshot.val()
-      likeCount.value = val?.count || 0
-    })
+      unsubscribe = onValue(likeRef, (snapshot) => {
+        const val = snapshot.val()
+        likeCount.value = val?.count || 0
+      })
+    } catch (e) {
+      console.error('Firebase init failed:', e)
+    }
   })
 
   onUnmounted(() => {
@@ -50,18 +55,24 @@ export function useLike(postId: string) {
 
   async function toggleLike() {
     liked.value = !liked.value
-    const database = getFirebaseDB()
-    const likeRef = dbRef(database, `likes/${postId}`)
+    try {
+      const database = await getFirebaseDB()
+      const { ref: dbRef, runTransaction } = await import('firebase/database')
+      const likeRef = dbRef(database, `likes/${postId}`)
 
-    await runTransaction(likeRef, (current) => {
-      const data = current || { count: 0 }
-      if (liked.value) {
-        data.count = (data.count || 0) + 1
-      } else {
-        data.count = Math.max(0, (data.count || 0) - 1)
-      }
-      return data
-    })
+      await runTransaction(likeRef, (current) => {
+        const data = current || { count: 0 }
+        if (liked.value) {
+          data.count = (data.count || 0) + 1
+        } else {
+          data.count = Math.max(0, (data.count || 0) - 1)
+        }
+        return data
+      })
+    } catch (e) {
+      console.error('Like toggle failed:', e)
+      liked.value = !liked.value
+    }
   }
 
   return { liked, likeCount, toggleLike }
