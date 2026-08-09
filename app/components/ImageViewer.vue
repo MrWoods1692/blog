@@ -3,7 +3,7 @@
     <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" />
 
     <!-- 操作按钮栏 -->
-    <div class="absolute top-3 left-1/2 -translate-x-1/2 flex items-center gap-0.5 px-1.5 py-1 rounded-xl bg-gray-900/90 backdrop-blur border border-gray-700/50 shadow-xl z-10 text-white overflow-x-auto max-w-[calc(100vw-2rem)]">
+    <div class="absolute top-3 left-1/2 -translate-x-1/2 flex flex-wrap items-center justify-center gap-0.5 px-1.5 py-1 rounded-xl bg-gray-900/90 backdrop-blur border border-gray-700/50 shadow-xl z-10 text-white max-w-[calc(100vw-2rem)]">
       <button @click="rotateLeft" class="p-1.5 rounded-lg hover:bg-gray-700/50 transition-colors flex-shrink-0" :title="t('image.rotateLeft')">
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
       </button>
