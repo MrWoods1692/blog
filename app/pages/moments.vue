@@ -5,11 +5,6 @@
         class="p-4 rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 hover:shadow-md transition-shadow">
         <div class="flex items-start justify-between gap-4">
           <p class="flex-1 text-gray-800 dark:text-gray-200">{{ moment.content }}</p>
-          <button @click="toggleLike(moment)" class="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors shrink-0"
-            :class="moment.liked ? 'text-red-500' : 'text-gray-400 hover:text-red-500'">
-            <Icon :name="moment.liked ? 'lucide:heart' : 'lucide:heart'" class="w-4 h-4" :class="{ 'fill-red-500': moment.liked }" />
-            <span class="text-sm">{{ moment.likes + (moment.liked ? 1 : 0) }}</span>
-          </button>
         </div>
         <div v-if="moment.images && moment.images.length > 0" class="grid gap-2 mt-3" :class="moment.images.length === 1 ? 'grid-cols-1 max-w-sm' : moment.images.length === 2 ? 'grid-cols-2' : 'grid-cols-3'">
           <button v-for="(img, idx) in moment.images" :key="idx" @click="openImage(img)" class="aspect-square rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-500 transition-colors cursor-pointer">
@@ -99,10 +94,6 @@ const openImage = (src: string) => {
   viewerSrc.value = src
   viewerAlt.value = ''
   showViewer.value = true
-}
-
-const toggleLike = (moment: any) => {
-  moment.liked = !moment.liked
 }
 
 // 监听路由和语言变化，重新加载说说
