@@ -8,9 +8,9 @@ const MOMENTS_PER_PAGE = 20
 const zhMomentsFiles = import.meta.glob<{ default: any[] }>('../../content/moments/zh/page-*.json', { eager: true })
 const enMomentsFiles = import.meta.glob<{ default: any[] }>('../../content/moments/en/page-*.json', { eager: true })
 
-// 使用 import.meta.glob 在构建时加载所有文章 Markdown 文件（?raw 以原始字符串方式加载）
-const zhPostsFiles = import.meta.glob<string>('../../content/posts/zh/*.md?raw', { eager: true })
-const enPostsFiles = import.meta.glob<string>('../../content/posts/en/*.md?raw', { eager: true })
+// 使用 import.meta.glob 在构建时加载所有文章 Markdown 文件（query: '?raw' 以原始字符串方式加载）
+const zhPostsFiles = import.meta.glob<string>('../../content/posts/zh/*.md', { eager: true, query: '?raw' })
+const enPostsFiles = import.meta.glob<string>('../../content/posts/en/*.md', { eager: true, query: '?raw' })
 
 /**
  * 解析 Markdown 文件中的 YAML frontmatter
@@ -66,8 +66,9 @@ const parseFrontmatter = (raw: string) => {
 // 加载所有文章
 const loadAllPosts = (locale: 'zh' | 'en'): any[] => {
   const files = locale === 'zh' ? zhPostsFiles : enPostsFiles
-  return Object.values(files).map(raw => {
-    const { meta, content } = parseFrontmatter(raw || '')
+  return Object.entries(files).map(([path, mod]) => {
+    const raw = typeof mod === 'string' ? mod : (mod as any).default || ''
+    const { meta, content } = parseFrontmatter(raw)
     return { ...meta, content }
   })
 }

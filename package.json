@@ -2,7 +2,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "nuxt build && cp _routes.json dist/_routes.json",
+    "build": "nuxt build && cp _routes.json .output/public/_routes.json",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
