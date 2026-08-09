@@ -1,0 +1,10 @@
+{
+  "id": "nuxt3-guide",
+  "title": "Nuxt 3 入门指南",
+  "summary": "Nuxt 3 是一个基于 Vue 3 的通用框架，它让构建服务端渲染的 Vue 应用变得简单。本文将带你快速上手 Nuxt 3。",
+  "date": "2026-08-03",
+  "tags": ["Vue", "Nuxt", "前端"],
+  "category": "技术",
+  "readTime": "8 分钟",
+  "content": "# Nuxt 3 入门指南\n\nNuxt 3 是基于 Vue 3 的通用框架，它让构建服务端渲染（SSR）的 Vue 应用变得简单而高效。\n\n## 快速开始\n\n### 1. 创建项目\n\n```bash\nnpx nuxi@latest init my-blog\ncd my-blog\nnpm install\nnpm run dev\n```\n\n### 2. 项目结构\n\n```text\nmy-blog/\n├── app/\n│   ├── pages/          # 路由页面\n│   ├── components/     # 组件\n│   ├── layouts/        # 布局\n│   └── assets/         # 静态资源\n├── public/             # 公开文件\n├── nuxt.config.ts      # Nuxt 配置\n└── package.json\n```\n\n## 核心概念\n\n### 自动导入\n\nNuxt 3 会自动导入 Vue 的 API 和常用函数：\n\n```vue\n<script setup>\nconst count = ref(0)\nconst doubled = computed(() => count.value * 2)\n</script>\n```\n\n### 文件路由\n\n`pages/` 目录下的文件会自动生成路由：\n\n```text\npages/\n├── index.vue          → /\n├── about.vue          → /about\n└── posts/\n    └── [id].vue       → /posts/:id\n```\n\n### 服务端渲染\n\nNuxt 3 支持 SSR，页面在服务端渲染后发送到客户端：\n\n```vue\n<script setup>\nconst { data } = await useFetch('/api/posts')\n</script>\n```\n\n## 静态生成\n\n对于博客这类内容，可以使用静态生成：\n\n```bash\nnpm run generate\n```\n\n这会在 `dist/` 目录生成静态 HTML 文件，可以直接部署到任何静态托管服务。\n\n## 总结\n\nNuxt 3 是一个功能强大的框架，特别适合构建博客、文档站等需要 SEO 的应用。它的自动导入、文件路由和 SSR 特性大大提升了开发效率。\n\n---\n\n*更多教程请关注我的博客！*"
+}

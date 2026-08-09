@@ -1,0 +1,10 @@
+{
+  "id": "hello-world",
+  "title": "Hello World",
+  "summary": "This is my first blog post. Welcome to my blog world where I share tech articles, life reflections, and interesting content.",
+  "date": "2026-08-01",
+  "tags": ["Getting Started", "Essay"],
+  "category": "Essay",
+  "readTime": "2 min",
+  "content": "# Hello World\n\nWelcome to my blog! 🎉\n\nThis is my first blog post. The reason for creating this blog is simple — **record** and **share**.\n\n## Why Write a Blog\n\nWriting a blog has several benefits:\n\n1. **Knowledge Retention** — Write down what you learn to deepen understanding\n2. **Help Others** — Your experience might help someone facing the same problem\n3. **Improve Expression** — Writing is an extension of thinking\n\n## What This Blog Has\n\n- 📝 **Posts** — Tech articles and life essays\n- 💬 **Moments** — Short daily notes\n- 🔧 **Projects** — Open source project showcase\n- 💬 **Comments** — GitHub Issues based comment system\n- 👍 **Likes** — Utterances like functionality\n\n## Tech Stack\n\n| Tech | Purpose |\n|------|------|\n| Nuxt 3 | Framework |\n| Vue 3 | UI Framework |\n| Tailwind CSS | Styling |\n| Markdown | Post content |\n| Utterances | Comments & Likes |\n\n---\n\n*Thanks for reading, looking forward to your feedback!*"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "tailwind-tips",
+  "title": "Tailwind CSS 实用技巧",
+  "summary": "Tailwind CSS 是一个功能类优先的 CSS 框架，本文分享一些实用的 Tailwind CSS 技巧和最佳实践。",
+  "date": "2026-08-05",
+  "tags": ["CSS", "Tailwind", "前端"],
+  "category": "技术",
+  "readTime": "5 分钟",
+  "content": "# Tailwind CSS 实用技巧\n\nTailwind CSS 是一个功能类优先的 CSS 框架，它提供了大量的原子类，让你直接在 HTML 中构建样式。\n\n## 为什么选择 Tailwind\n\n- **开发效率高** — 无需在 HTML 和 CSS 之间切换\n- **一致性** — 统一的命名规范，避免样式混乱\n- **可维护性** — 删除未使用的类即可清理样式\n- **响应式** — 内置响应式工具类\n\n## 实用技巧\n\n### 1. 条件样式\n\n```html\n<div :class=\"[isActive ? 'bg-blue-500' : 'bg-gray-200']\">\n  状态指示器\n</div>\n```\n\n### 2. 响应式设计\n\n```html\n<div class=\"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4\">\n  <div>卡片 1</div>\n  <div>卡片 2</div>\n  <div>卡片 3</div>\n</div>\n```\n\n### 3. 暗色模式\n\n```html\n<div class=\"bg-white dark:bg-gray-900 text-gray-900 dark:text-white\">\n  支持暗色模式的内容\n</div>\n```\n\n### 4. 自定义配置\n\n在 `tailwind.config.js` 中扩展主题：\n\n```js\nexport default {\n  theme: {\n    extend: {\n      colors: {\n        primary: '#3b82f6',\n        secondary: '#8b5cf6'\n      }\n    }\n  }\n}\n```\n\n### 5. 工具类组合\n\n```html\n<button class=\"\n  px-4 py-2 rounded-lg font-medium\n  bg-blue-500 hover:bg-blue-600\n  text-white transition-colors duration-200\n  focus:outline-none focus:ring-2 focus:ring-blue-300\n\">\n  点击我\n</button>\n```\n\n## 最佳实践\n\n1. **使用 `@apply` 提取重复样式**\n2. **善用 `group` 和 `peer` 实现交互效果**\n3. **使用 `@layer` 组织自定义样式**\n4. **开启 JIT 模式提升构建速度**\n\n---\n\n*希望这些技巧对你有帮助！*"
+}

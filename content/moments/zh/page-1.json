@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "content": "今天开始写博客了，希望能坚持下去！",
+    "date": "2026-08-01",
+    "likes": 5,
+    "images": ["https://picsum.photos/seed/moment1/400/300", "https://picsum.photos/seed/moment1b/400/300"]
+  },
+  {
+    "id": 2,
+    "content": "学会了 Nuxt 3 的静态生成，部署到 GitHub Pages 超简单。",
+    "date": "2026-08-03",
+    "likes": 12
+  },
+  {
+    "id": 3,
+    "content": "Tailwind CSS 真的很好用，写样式效率提升了一倍。",
+    "date": "2026-08-05",
+    "likes": 8,
+    "images": ["https://picsum.photos/seed/moment3/400/300"]
+  },
+  {
+    "id": 4,
+    "content": "周末去爬山了，风景很美，心情也很好。",
+    "date": "2026-08-07",
+    "likes": 15,
+    "images": ["https://picsum.photos/seed/moment4a/400/300", "https://picsum.photos/seed/moment4b/400/300", "https://picsum.photos/seed/moment4c/400/300"]
+  }
+]

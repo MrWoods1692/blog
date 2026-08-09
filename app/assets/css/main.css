@@ -1,0 +1,157 @@
+/* Highlight.js 代码高亮主题 */
+@import 'highlight.js/styles/github.css';
+@import 'highlight.js/styles/github-dark.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply antialiased;
+  }
+}
+
+@layer components {
+  .prose {
+    @apply text-gray-800 dark:text-gray-200 leading-relaxed;
+  }
+
+  .prose h1 {
+    @apply text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4;
+  }
+
+  .prose h2 {
+    @apply text-2xl font-semibold text-gray-900 dark:text-gray-100 mt-8 mb-4;
+  }
+
+  .prose h3 {
+    @apply text-xl font-semibold text-gray-900 dark:text-gray-100 mt-6 mb-3;
+  }
+
+  .prose p {
+    @apply mb-4;
+  }
+
+  .prose ul, .prose ol {
+    @apply mb-4 pl-6;
+  }
+
+  .prose li {
+    @apply mb-1;
+  }
+
+  .prose blockquote {
+    @apply border-l-4 border-blue-500 pl-4 italic text-gray-600 dark:text-gray-400 my-4;
+  }
+
+  .prose code {
+    @apply bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-sm font-mono;
+  }
+
+  .prose pre {
+    @apply bg-gray-900 dark:bg-gray-950 text-gray-100 p-4 rounded-xl overflow-x-auto mb-4;
+  }
+
+  .prose pre code {
+    @apply bg-transparent p-0 text-sm;
+  }
+
+  .prose table {
+    @apply w-full border-collapse mb-4;
+  }
+
+  .prose th, .prose td {
+    @apply border border-gray-200 dark:border-gray-700 px-4 py-2 text-left;
+  }
+
+  .prose th {
+    @apply bg-gray-50 dark:bg-gray-800 font-semibold;
+  }
+
+  .prose img {
+    @apply rounded-xl max-w-full my-4 cursor-pointer transition-shadow hover:shadow-lg;
+    max-width: 640px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+  }
+
+  .prose hr {
+    @apply border-gray-200 dark:border-gray-700 my-8;
+  }
+
+  .prose a {
+    @apply text-blue-500 hover:text-blue-600 dark:hover:text-blue-400 underline;
+  }
+
+  .anchor-link {
+    @apply text-gray-400 hover:text-blue-500 ml-1 no-underline opacity-0 group-hover:opacity-100 transition-opacity;
+  }
+
+  /* 代码块复制按钮 */
+  .code-block-wrapper {
+    position: relative;
+    margin: 1rem 0;
+  }
+
+  .code-block-wrapper pre {
+    margin: 0;
+  }
+
+  .copy-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #64748b;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s, background-color 0.2s, color 0.2s, border-color 0.2s;
+  }
+
+  .code-block-wrapper:hover .copy-btn {
+    opacity: 1;
+  }
+
+  .copy-btn:hover {
+    background: rgba(255, 255, 255, 1);
+    color: #3b82f6;
+    border-color: #93c5fd;
+  }
+
+  .copy-btn.copied {
+    color: #22c55e;
+    border-color: #86efac;
+    opacity: 1;
+  }
+
+  .dark .copy-btn {
+    background: rgba(30, 30, 30, 0.9);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #94a3b8;
+  }
+
+  .dark .copy-btn:hover {
+    background: rgba(30, 30, 30, 1);
+    color: #60a5fa;
+    border-color: #1d4ed8;
+  }
+
+  .dark .copy-btn.copied {
+    color: #4ade80;
+    border-color: #166534;
+  }
+}

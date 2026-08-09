@@ -1,0 +1,54 @@
+{
+  "site": {
+    "title": "Minimal Blog",
+    "titleZh": "极简博客",
+    "description": "A minimal static blog for tech and life",
+    "descriptionZh": "一个极简的静态博客，记录技术与生活",
+    "author": "Author",
+    "authorZh": "博主",
+    "github": "https://github.com/your-username",
+    "twitter": "https://twitter.com/your-username"
+  },
+  "projects": [
+    {
+      "id": "blog",
+      "name": "Minimal Blog",
+      "nameZh": "极简博客",
+      "description": "A minimal static blog built with Nuxt 3, supporting Markdown rendering, comments, likes, and more.",
+      "descriptionZh": "基于 Nuxt 3 构建的极简静态博客，支持 Markdown 渲染、评论、点赞等功能。",
+      "tags": [
+        "Nuxt",
+        "Vue",
+        "Tailwind"
+      ],
+      "url": "https://github.com/your-username/blog",
+      "demo": "https://your-username.github.io/blog"
+    },
+    {
+      "id": "todo-app",
+      "name": "Todo App",
+      "nameZh": "Todo App",
+      "description": "A clean todo application with local storage and category management.",
+      "descriptionZh": "一个简洁的待办事项应用，支持本地存储和分类管理。",
+      "tags": [
+        "Vue",
+        "TypeScript"
+      ],
+      "url": "https://github.com/your-username/todo-app",
+      "demo": "https://your-username.github.io/todo-app"
+    },
+    {
+      "id": "weather-widget",
+      "name": "Weather Widget",
+      "nameZh": "天气小组件",
+      "description": "A weather query widget based on OpenWeather API with a clean and beautiful interface.",
+      "descriptionZh": "基于 OpenWeather API 的天气查询小组件，界面简洁美观。",
+      "tags": [
+        "React",
+        "API"
+      ],
+      "url": "https://github.com/your-username/weather-widget",
+      "demo": "https://your-username.github.io/weather-widget"
+    }
+  ]
+}
