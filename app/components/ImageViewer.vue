@@ -50,11 +50,6 @@
     >
       <img :src="src" :alt="alt" class="max-w-none rounded-lg shadow-2xl" :style="{ maxWidth: '90vw', maxHeight: '85vh' }" />
     </div>
-
-    <!-- 提示 -->
-    <div class="absolute bottom-4 left-1/2 -translate-x-1/2 text-xs text-gray-400 px-3 py-1.5 rounded-lg bg-gray-900/70 backdrop-blur border border-gray-700/50">
-      {{ t('image.hint') }}
-    </div>
   </div>
 </template>
 
