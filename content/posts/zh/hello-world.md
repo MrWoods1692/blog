@@ -1,6 +1,6 @@
 ---
 id: hello-world
-title: Hello World
+title: 你好世界
 summary: 欢迎来到 Woods'Blog。这是我搭建的第一篇博客文章，详细介绍这个博客的功能、技术栈和设计理念。
 date: 2026-08-09
 tags:

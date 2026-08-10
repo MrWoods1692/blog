@@ -1,0 +1,2 @@
+/*
+  Content-Security-Policy-Report-Only: script-src 'self' 'unsafe-inline' 'unsafe-eval' https://static.cloudflareinsights.com https://utteranc.es; connect-src 'self' https://cloudflareinsights.com; frame-src https://utteranc.es
