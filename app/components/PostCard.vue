@@ -17,10 +17,6 @@
           <Icon name="lucide:clock" class="w-3 h-3" />
           {{ displayReadTime }}
         </span>
-        <span class="flex items-center gap-1">
-          <Icon name="lucide:folder" class="w-3 h-3" />
-          {{ displayCategory }}
-        </span>
       </div>
 
       <div class="flex items-center gap-1.5 md:flex-wrap">
@@ -44,7 +40,6 @@ const props = defineProps<{
     summary: string
     date: string
     tags: string[]
-    category: string
     readTime: string
   }
 }>()
@@ -54,6 +49,5 @@ const { lang } = useLang()
 const displayTitle = computed(() => props.post.title)
 const displaySummary = computed(() => props.post.summary)
 const displayTags = computed(() => props.post.tags)
-const displayCategory = computed(() => props.post.category)
 const displayReadTime = computed(() => props.post.readTime)
 </script>

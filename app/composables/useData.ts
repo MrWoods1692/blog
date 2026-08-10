@@ -144,15 +144,6 @@ export const useData = () => {
     return Array.from(tagMap.entries()).map(([name, count]) => ({ name, count }))
   })
 
-  // 获取所有分类（根据语言返回）
-  const allCategories = computed(() => {
-    const catMap = new Map<string, number>()
-    posts.value.forEach(post => {
-      catMap.set(post.category, (catMap.get(post.category) || 0) + 1)
-    })
-    return Array.from(catMap.entries()).map(([name, count]) => ({ name, count }))
-  })
-
   // 按年份归档
   const archives = computed(() => {
     const yearMap = new Map<string, number>()
@@ -178,13 +169,6 @@ export const useData = () => {
   const filterByTag = (tag: string) => {
     return posts.value.filter(post => {
       return post.tags.includes(tag)
-    })
-  }
-
-  // 按分类筛选
-  const filterByCategory = (category: string) => {
-    return posts.value.filter(post => {
-      return post.category === category
     })
   }
 
@@ -227,11 +211,9 @@ export const useData = () => {
     momentsTotalPages,
     loadMoments,
     allTags,
-    allCategories,
     archives,
     searchPosts,
     filterByTag,
-    filterByCategory,
     filterByYear,
     totalWords,
     totalReadTime,

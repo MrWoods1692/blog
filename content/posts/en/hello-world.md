@@ -7,7 +7,6 @@ tags:
   - Getting Started
   - Essay
   - Introduction
-category: Essay
 readTime: 5 min
 ---
 

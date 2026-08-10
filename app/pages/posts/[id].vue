@@ -36,10 +36,6 @@
           <Icon name="lucide:clock" class="w-4 h-4" />
           {{ displayReadTime }}
         </span>
-        <span class="flex items-center gap-1">
-          <Icon name="lucide:folder" class="w-4 h-4" />
-          {{ displayCategory }}
-        </span>
       </div>
       <div class="flex flex-wrap gap-2 mt-4">
         <NuxtLink v-for="tag in displayTags" :key="tag" :to="`/tags/${tag}`"
@@ -214,7 +210,6 @@ const startTypewriter = async (text: string, forceRestart: boolean = false) => {
 const displayTitle = computed(() => post.value ? post.value.title : '')
 const displaySummary = computed(() => post.value ? post.value.summary : '')
 const displayReadTime = computed(() => post.value ? post.value.readTime : '')
-const displayCategory = computed(() => post.value ? post.value.category : '')
 const displayTags = computed(() => post.value ? post.value.tags : [])
 const shareUrl = computed(() => {
   return typeof window !== 'undefined' ? window.location.href : ''

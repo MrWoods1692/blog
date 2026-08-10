@@ -77,7 +77,6 @@ pnpm preview
   "summary": "这是一篇新文章的简介，会显示在文章列表页。",
   "date": "2026-08-09",
   "tags": ["标签1", "标签2"],
-  "category": "分类名",
   "readTime": "5 min",
   "content": "# 标题\n\n这里是 Markdown 格式的文章正文。\n\n## 二级标题\n\n- 列表项 1\n- 列表项 2\n\n```javascript\nconsole.log('Hello World!')\n```\n\n> 这是一段引用\n\n---\n\n*文章结尾*"
 }
@@ -92,7 +91,6 @@ pnpm preview
 | `summary` | string | ✅ | 文章简介，显示在列表页 |
 | `date` | string | ✅ | 发布日期，格式 `YYYY-MM-DD` |
 | `tags` | string[] | ✅ | 标签数组 |
-| `category` | string | ✅ | 文章分类 |
 | `readTime` | string | ✅ | 预计阅读时间，如 `"5 min"` |
 | `content` | string | ✅ | Markdown 格式的文章正文 |
 
