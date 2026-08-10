@@ -33,21 +33,23 @@ export const useMarkdown = () => {
     if (isExternal) {
       token.attrPush(['target', '_blank'])
       token.attrPush(['rel', 'noopener noreferrer'])
-      // 始终显示下划线，不做 hover 隐藏
-      token.attrPush(['class', 'underline decoration-orange-500 dark:decoration-orange-400 hover:decoration-orange-700 dark:hover:decoration-orange-300 transition-colors'])
+      // 始终显示下划线，不做 hover 隐藏（使用 !important 覆盖 prose 的 no-underline）
+      token.attrSet('class', '!underline decoration-orange-500 dark:decoration-orange-400 hover:decoration-orange-700 dark:hover:decoration-orange-300 transition-colors')
     }
 
     return defaultLinkOpen(tokens, idx, options, env, self)
   }
   md.renderer.rules.link_close = function (tokens, idx, options, env, self) {
     const html = defaultLinkClose(tokens, idx, options, env, self)
-    // 找到对应的开标签，判断是否为外链
-    const openIdx = tokens[idx - 1] && tokens[idx - 1].type === 'link_open' ? idx - 1 : -1
-    if (openIdx >= 0) {
-      const hrefIdx = tokens[openIdx].attrIndex('href')
-      const href = hrefIdx >= 0 ? tokens[openIdx].attrs![hrefIdx][1] : ''
-      if (href && (href.startsWith('http://') || href.startsWith('https://'))) {
-        return html + externalLinkIcon
+    // 回溯查找匹配的 link_open token（按 level 匹配）
+    for (let i = idx - 1; i >= 0; i--) {
+      if (tokens[i].type === 'link_open' && tokens[i].level === tokens[idx].level) {
+        const hrefIdx = tokens[i].attrIndex('href')
+        const href = hrefIdx >= 0 ? tokens[i].attrs![hrefIdx][1] : ''
+        if (href && (href.startsWith('http://') || href.startsWith('https://'))) {
+          return html + externalLinkIcon
+        }
+        break
       }
     }
     return html
