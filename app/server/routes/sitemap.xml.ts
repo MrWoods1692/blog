@@ -1,9 +1,15 @@
 import { defineEventHandler, setHeader } from 'h3'
-import postsIndex from '../../../content/posts/index.json'
+import index1 from '../../../content/posts/index_1.json'
+// 新增文章分页（如 index_2.json）时，请在此处添加对应静态导入并合并到 posts，
+// 例如：import index2 from '../../../content/posts/index_2.json'
 
 export default defineEventHandler((event) => {
   const baseUrl = 'https://woods.blog'
-  const posts = postsIndex
+  // 合并所有分页索引（编号越大越新），并按日期降序排列（最新在前）
+  const posts = [
+    ...index1
+    // ...index2,
+  ].sort((a, b) => b.date.localeCompare(a.date))
 
   const urls = [
     `<url><loc>${baseUrl}/</loc><lastmod>${new Date().toISOString().split('T')[0]}</lastmod><changefreq>daily</changefreq><priority>1.0</priority></url>`,

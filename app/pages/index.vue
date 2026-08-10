@@ -39,28 +39,22 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useData } from '~/composables/useData'
 import { useLang } from '~/composables/useLang'
 import PostCard from '~/components/PostCard.vue'
 
 const route = useRoute()
-const { site, posts } = useData()
+const { site, posts, postPagePosts, postTotalPages, loadPostsPage } = useData()
 const { lang } = useLang()
 
-const PER_PAGE = 20
-
 const siteDesc = computed(() => lang.value === 'zh' ? site.descriptionZh : site.description)
-const currentPage = computed(() => {
-  const p = parseInt(route.query.page as string)
-  return isNaN(p) || p < 1 ? 1 : p
-})
-const totalPages = computed(() => Math.ceil(posts.value.length / PER_PAGE))
-const paginatedPosts = computed(() => {
-  const start = (currentPage.value - 1) * PER_PAGE
-  return posts.value.slice(start, start + PER_PAGE)
-})
+
+// 分页由 index_*.json 索引文件驱动：第 1 页 = 编号最大的文件（最新一页）
+const currentPage = ref(parseInt(route.query.page as string) || 1)
+const totalPages = computed(() => postTotalPages.value)
+const paginatedPosts = computed(() => postPagePosts.value)
 
 const displayPages = computed(() => {
   const pages: (number | string)[] = []
@@ -84,8 +78,15 @@ const displayPages = computed(() => {
 
 const goToPage = (page: number) => {
   if (page < 1 || page > totalPages.value) return
+  currentPage.value = page
   navigateTo(`/?page=${page}`, { replace: true })
 }
+
+// 监听路由页码和语言变化，重新加载分页文章
+watch([() => route.query.page, lang], () => {
+  currentPage.value = parseInt(route.query.page as string) || 1
+  loadPostsPage(currentPage.value)
+}, { immediate: true })
 
 useHead({
   title: "Woods'Blog",

@@ -54,7 +54,8 @@ const { lang, t } = useLang()
 
 const currentPage = ref(parseInt(route.query.page as string) || 1)
 
-const sortedMoments = computed(() => [...moments.value].sort((a, b) => b.date.localeCompare(a.date)))
+// 页内按 id 降序排列：id 越大表示越后写的（越新），显示在最前
+const sortedMoments = computed(() => [...moments.value].sort((a, b) => b.id - a.id))
 
 const displayPages = computed(() => {
   const pages: { label: string | number; value: number | null }[] = []

@@ -12,6 +12,10 @@ const enMomentsFiles = import.meta.glob<{ default: any[] }>('../../content/momen
 const zhPostsFiles = import.meta.glob<string>('../../content/posts/zh/*.md', { eager: true, query: '?raw' })
 const enPostsFiles = import.meta.glob<string>('../../content/posts/en/*.md', { eager: true, query: '?raw' })
 
+// 使用 import.meta.glob 在构建时加载所有文章索引分页文件（index_1.json、index_2.json ...）
+// 编号越大的文件代表越新的内容，显示时从最大的编号开始
+const postIndexFiles = import.meta.glob<{ default: any[] }>('../../content/posts/index_*.json', { eager: true })
+
 /**
  * 解析 Markdown 文件中的 YAML frontmatter
  * 格式: ---\nkey: value\n---\n正文内容
@@ -73,6 +77,33 @@ const loadAllPosts = (locale: 'zh' | 'en'): any[] => {
   })
 }
 
+// 获取所有文章索引分页（按编号升序：index_1 为最旧一页，编号越大越新）
+const getPostIndexPages = (): { num: number; posts: any[] }[] => {
+  return Object.entries(postIndexFiles)
+    .map(([path, mod]) => ({
+      num: parseInt(path.match(/index_(\d+)/)?.[1] || '0'),
+      posts: mod.default || []
+    }))
+    .sort((a, b) => a.num - b.num)
+}
+
+// 计算文章总页数（索引文件数量）
+const getPostTotalPages = (): number => Object.keys(postIndexFiles).length
+
+// 获取指定页的文章（从最大的编号开始显示：第 1 页 = 编号最大的文件，即最新一页）
+// 每页内的文章按日期降序排列，确保最新在前
+const getPostsPageData = (page: number, locale: 'zh' | 'en'): any[] => {
+  const pages = getPostIndexPages()
+  const total = pages.length
+  if (page < 1 || page > total) return []
+  const pageEntries = pages[total - page].posts
+  const postMap = new Map(loadAllPosts(locale).map(p => [p.id, p]))
+  return pageEntries
+    .map(entry => postMap.get(entry.id))
+    .filter(Boolean)
+    .sort((a, b) => b.date.localeCompare(a.date))
+}
+
 // 合并所有页面的说说
 const loadAllMoments = (locale: 'zh' | 'en'): any[] => {
   const files = locale === 'zh' ? zhMomentsFiles : enMomentsFiles
@@ -90,13 +121,13 @@ const getTotalPages = (locale: 'zh' | 'en'): number => {
   return Object.keys(files).length
 }
 
-// 获取指定页的说说
+// 获取指定页的说说（从文件名数字大的开始作为第一页：page 1 = 编号最大的文件，即最新一页）
 const getMomentsPage = (page: number, locale: 'zh' | 'en'): any[] => {
   const files = locale === 'zh' ? zhMomentsFiles : enMomentsFiles
   const keys = Object.keys(files).sort((a, b) => {
     const numA = parseInt(a.match(/page-(\d+)/)?.[1] || '0')
     const numB = parseInt(b.match(/page-(\d+)/)?.[1] || '0')
-    return numA - numB
+    return numB - numA
   })
   const key = keys[page - 1]
   if (!key) return []
@@ -116,8 +147,10 @@ export const useData = () => {
 
   const locale = computed(() => (lang.value === 'zh' ? 'zh' : 'en') as 'zh' | 'en')
 
-  // 文章：从独立文件加载
-  const posts = computed(() => loadAllPosts(locale.value))
+  // 文章：从独立文件加载，按日期降序排列（最新在前）
+  const posts = computed(() => {
+    return loadAllPosts(locale.value).sort((a, b) => b.date.localeCompare(a.date))
+  })
 
   // 说说：从独立文件加载
   const moments = ref<any[]>([])
@@ -126,6 +159,15 @@ export const useData = () => {
   const loadMoments = (page: number = 1) => {
     momentsTotalPages.value = getTotalPages(locale.value)
     moments.value = getMomentsPage(page, locale.value)
+  }
+
+  // 文章分页：由 index_*.json 索引文件驱动
+  const postPagePosts = ref<any[]>([])
+  const postTotalPages = ref(0)
+
+  const loadPostsPage = (page: number = 1) => {
+    postTotalPages.value = getPostTotalPages()
+    postPagePosts.value = getPostsPageData(page, locale.value)
   }
 
   // 监听语言变化，重新加载说说
@@ -207,6 +249,9 @@ export const useData = () => {
   return {
     site,
     posts,
+    postPagePosts,
+    postTotalPages,
+    loadPostsPage,
     moments,
     momentsTotalPages,
     loadMoments,
