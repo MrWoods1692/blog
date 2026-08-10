@@ -21,6 +21,9 @@ export const useMarkdown = () => {
   const defaultLinkOpen = md.renderer.rules.link_open || function (tokens, idx, options, env, self) {
     return self.renderToken(tokens, idx, options)
   }
+  const defaultLinkClose = md.renderer.rules.link_close || function (tokens, idx, options, env, self) {
+    return self.renderToken(tokens, idx, options)
+  }
   md.renderer.rules.link_open = function (tokens, idx, options, env, self) {
     const token = tokens[idx]
     const hrefIdx = token.attrIndex('href')
@@ -30,11 +33,24 @@ export const useMarkdown = () => {
     if (isExternal) {
       token.attrPush(['target', '_blank'])
       token.attrPush(['rel', 'noopener noreferrer'])
-      token.attrPush(['class', 'underline decoration-orange-500 dark:decoration-orange-400 hover:decoration-orange-700 dark:hover:decoration-orange-300 transition-all'])
+      // 始终显示下划线，不做 hover 隐藏
+      token.attrPush(['class', 'underline decoration-orange-500 dark:decoration-orange-400 hover:decoration-orange-700 dark:hover:decoration-orange-300 transition-colors'])
     }
 
-    const html = defaultLinkOpen(tokens, idx, options, env, self)
-    return isExternal ? html.replace('</a>', `${externalLinkIcon}</a>`) : html
+    return defaultLinkOpen(tokens, idx, options, env, self)
+  }
+  md.renderer.rules.link_close = function (tokens, idx, options, env, self) {
+    const html = defaultLinkClose(tokens, idx, options, env, self)
+    // 找到对应的开标签，判断是否为外链
+    const openIdx = tokens[idx - 1] && tokens[idx - 1].type === 'link_open' ? idx - 1 : -1
+    if (openIdx >= 0) {
+      const hrefIdx = tokens[openIdx].attrIndex('href')
+      const href = hrefIdx >= 0 ? tokens[openIdx].attrs![hrefIdx][1] : ''
+      if (href && (href.startsWith('http://') || href.startsWith('https://'))) {
+        return html + externalLinkIcon
+      }
+    }
+    return html
   }
 
   const render = (content: string) => {
