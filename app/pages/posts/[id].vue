@@ -351,14 +351,28 @@ const addExternalLinkConfirm = () => {
   })
 }
 
+const refreshArticleEnhancements = () => {
+  if (typeof window === 'undefined') return
+  addCopyButtons()
+  addImageClickHandlers()
+  addExternalLinkConfirm()
+  extractToc()
+  initScrollSpy()
+}
+
 onMounted(() => {
   setTimeout(() => {
-    addCopyButtons()
-    addImageClickHandlers()
-    addExternalLinkConfirm()
-    extractToc()
-    initScrollSpy()
+    refreshArticleEnhancements()
   }, 0)
+})
+
+// 语言切换后正文 DOM 会重新渲染（标题文本、锚点 ID、代码块都会变化），
+// 必须重新提取目录并重建滚动监听与事件绑定，
+// 否则目录停留在旧语言且锚点失效导致无法跳转
+watch(lang, () => {
+  nextTick(() => {
+    refreshArticleEnhancements()
+  })
 })
 
 // 目录
@@ -376,6 +390,8 @@ const extractToc = () => {
     text: h.textContent?.replace(/#/g, '').trim() || '',
     level: parseInt(h.tagName[1])
   }))
+  // 语言切换后旧的高亮 ID 可能已不存在，先重置
+  activeTocId.value = ''
 }
 
 const initScrollSpy = () => {
