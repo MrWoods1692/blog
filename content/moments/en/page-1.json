@@ -10,7 +10,11 @@
     "images": ["https://cloudflarecnimg.scdn.io/i/6a7852814256a_1786270337.webp", "https://cloudflarecnimg.scdn.io/i/6a7852a93792f_1786270377.webp"]
   },{
     "id": 3,
-    "content": "Those kids who know nothing but act all smart are really disgusting",
+    "content": "Those kids who know nothing but act all smart are really disgusting.",
     "date": "2026-08-10"
+  },{
+    "id": 3,
+    "content": "Money in this world is too hard to earn.",
+    "date": "2026-08-11"
   }
 ]
