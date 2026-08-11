@@ -1,7 +1,7 @@
 ---
 id: the-hustle-for-cash
 title: The Hustle for Cash
-summary: 
+summary: After graduation, the author attempted various money-making projects, initially considering reselling VPN subscriptions and AI API tokens. The VPN project was abandoned because SubBoost could not manage users, so the author instead purchased servers to build NewAPI, integrating a total of five upstream sources, including official and other relay stations, to provide model call services, and used Xianyu to automatically sell redemption codes. However, they encountered problems such as inconvenient batch operations, unpredictable upstream pricing, and difficulties in recovering costs. Overall, it was a low-cost, exploratory type of entrepreneurship, currently still in its early stage with an uncertain future.
 date: 2026-08-11
 tags:
   - NewAPI
