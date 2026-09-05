@@ -269,10 +269,10 @@ onInit(ctx) {
 
 ---
 
-## 总结
+## 尾巴
 
 Campux 的插件系统不算复杂，但覆盖了核心需求：权限声明、生命周期、事件通信、审计日志。它不是微内核架构，更像是「带有插件约定的服务端框架」——所有插件运行在同一个进程里，通过共享的事件总线通信。
 
 这个设计的适用场景是：功能模块需要解耦，但不需要进程级隔离。对于校园墙这种中小型项目，这套方案在开发效率和架构灵活性之间找到了一个合适的平衡点。
 
-源码在 [Campux GitHub 仓库](https://github.com/MrWoods1692/Campux) 的 `packages/plugin/` 目录下。
+源码在 [Campux GitHub 仓库](https://github.com/idoknow/Campux) 的 `packages/plugin/` 目录下。

@@ -275,4 +275,4 @@ Campux's plugin system isn't overly complex, but it covers the essentials: permi
 
 This design works well when you need feature decoupling without process-level isolation. For a mid-sized project like a campus wall, it strikes a good balance between development efficiency and architectural flexibility.
 
-Source code is in the `packages/plugin/` directory of the [Campux GitHub repository](https://github.com/MrWoods1692/Campux).
+Source code is in the `packages/plugin/` directory of the [Campux GitHub repository](https://github.com/idoknow/Campux).
