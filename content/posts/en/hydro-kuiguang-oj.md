@@ -1,7 +1,7 @@
 ---
 id: hydro-kuiguang-oj
-title: Building an Online Judge for Kuiguang on Hydro
-summary: Forked Hydro from GitHub, spent a week+ building an Online Judge from scratch for Guiguang School. Campux OAuth single sign-on, check-in calendar, Celadon theme, school branding, ranking fix — 41 commits total. Here's what I changed and why.
+title: Building an OJ for Kuiguang on Hydro
+summary: Last year I deployed Hydro for Kuiguang on a NAT machine, ran it for a year. The NAT machine is about to expire, so I forked Hydro and rebuilt the OJ from scratch — Campux OAuth SSO, check-in plugin, Celadon theme, branding, ranking fix. 41 commits, here's what I changed.
 date: 2026-10-02
 tags:
   - Hydro
@@ -12,44 +12,44 @@ tags:
 readTime: 12 min
 ---
 
-# Building an Online Judge for Kuiguang on Hydro
+# Building an OJ for Kuiguang on Hydro
 
-A teacher at school asked me last week whether I could set up an Online Judge (OJ) for Guiguang School. My first thought was: isn't Hydro already doing this? So I forked Hydro, spent a week+ turning it into a working OJ for the school.
+Last year I deployed Hydro for Kuiguang, running on a NAT machine. It's been in use for a year now, and the NAT machine is about to expire. I'd already been wanting to build my own OJ system for a while, so Hydro was the obvious starting point — and I happened to have a few free days this week. So I went for it.
 
-This post walks through the whole process. 41 commits, 84 files changed, ~3800 lines added/removed. What I changed, and why.
+This post is a recap of the whole thing. 41 commits, 84 files changed, ~3800 lines added/removed. Here's roughly what happened.
 
-## Why Hydro?
+## So, why Hydro?
 
-Hydro is the only fully TypeScript OJ I know of that has clean architecture and an active community. A few things I like about it:
+Hydro is just a good fit, IMO. Clean code, a solid feature set. When I started last year I tried a few other OJ systems and none of them felt right. The first one I used was the OJ that came with 一本通 (the classic OI textbook). Then I used Luogu. And there was one my programming teacher set up himself — I can't remember what template it used, it had some beautification applied and looked okay, but still felt lacking.
 
-- **Full-stack in one repo** — Koa + Nuxt, not a PHP patchwork of disconnected pieces;
+- **Full-stack in one repo** — Koa + Nuxt, not a PHP patchwork where every feature is a duct-tape job. PHP code just reads badly;
 - **Plugin-based** — core, UI, judge, and framework are independent packages, so changes in one don't affect others;
-- **Well-maintained docs and issues** — when you get stuck, there's a community that answers;
-- **Easy to deploy** — `yarn install` and it just runs.
+- **Well-maintained docs and issues** — when you get stuck, there's a community that answers (though after my changes I can't sync upstream anymore, since I've changed the database and everything);
+- **Easy to deploy** — `yarn install` and it runs.
 
-For a new project, all of this means I don't have to learn some weird framework from scratch. Time saved.
+For a project you're picking up fresh, all of this means you don't have to learn some weird framework from scratch. Time saved.
 
 ## The overall approach
 
-I didn't just clone Hydro and deploy it. I forked it and worked through a list of changes:
+I didn't just clone Hydro and deploy it. I forked it (though that's literally how it started):
 
-1. **Upstream sync** — kept `origin/master`, but my daily dev branch is also `master` (Hydro uses master, not main);
-2. **Feature changes** — each commit does one thing, formatted as `area: short description` for easy rollback;
-3. **Docs collapsed by OS** — README is now split by Linux/Windows sections with all the deployment gotchas written down.
+1. **Upstream sync** — kept `origin/master`, but my daily dev branch is also `master` (not main, Hydro upstream uses master);
+2. **Feature changes** — one thing per commit, formatted as `area: short description` for easy rollback;
+3. **Docs collapsed by OS** — README is now split by Linux/Windows sections, with every deployment gotcha I stepped in written down.
 
-Now the fork is at: **41 commits / 84 files / +2618 / -1234**.
+Now the fork is at: **70 commits / 142 files / +3870 / -1538**.
 
-## What changed
+## Changes
 
-Grouped by theme, with real commits and code references.
+Grouped by theme.
 
 ### 1. Campux OAuth: single sign-on everywhere
 
-This is the biggest change in the fork. The school has its own unified login system — Campux (an OAuth2 provider) — that handles every campus account. Stock Hydro uses local username/password + Gravatar avatars, which doesn't fit at all.
+This is the biggest change in the fork. The school has its own unified login system — Campux (an OAuth2 provider) — that handles every campus account. Stock Hydro uses username/password + Gravatar avatars, which doesn't fit at all.
 
 So:
 
-- Disabled local password login, OAuth-only mode;
+- Killed local password login, OAuth-only mode;
 - Map Campux QQ numbers to Hydro uid and nickname;
 - Use QQ avatars directly, no more Gravatar;
 - Force password setup after first OAuth login (for future password reset);
@@ -68,9 +68,11 @@ a908aeda oauth: single registered callback plus cross-host session attach
 
 `a908aeda` was the one I struggled with the most: OAuth callbacks returned 400 across hosts because Hydro hardcodes `redirect_uri`. Fixed by **building `redirect_uri` dynamically from the request host**, so both local dev and production domains work.
 
+Of course, the main reason I wired up Campux was also to give the campus wall (Campux) a bit of a push — not enough people were using it.
+
 ### 2. Check-in: a Hydro-native plugin
 
-Hydro doesn't have a check-in feature. The school wants daily sign-in so teachers can see at a glance who came and who didn't.
+Hydro doesn't have a check-in feature. The school wants daily sign-in so teachers can see at a glance who came and who didn't. Also to spark a bit of interest.
 
 I created a new `checkin` package under `packages/`, going the full Hydro plugin registration route:
 
@@ -130,7 +132,7 @@ Strongly recommend persistent MongoDB for production; the memory version is for 
 
 ## Gotchas
 
-A few I remember:
+A few of the dumbest ones:
 
 1. **OAuth redirect_uri hardcoded → cross-host 400**: fixed in `a908aeda`. Build it dynamically from the request host.
 2. **Service Worker cache grabbed stale logos**: `7b7ab2e5`. Hydro's service worker caches static assets, so logo changes must bust the cache. Now branding logic runs in start scripts, not boot — that avoids grabbing stale assets during boot.
@@ -150,8 +152,10 @@ Main pages after the rebuild:
 
 ## Tail
 
-A week+ from zero to working, and Hydro's foundation is genuinely solid. The biggest takeaway from forking: **Hydro's plugin architecture is well done** — check-in, OAuth, and themes all develop independently, no touching core code.
+Hydro's mostly refactored. The biggest takeaway from forking: **Hydro's plugin architecture is decent** — check-in, OAuth, and themes all develop independently, no touching core code.
 
-Fork: https://github.com/MrWoods1692/Hydro , issues welcome.
+Repo: https://github.com/MrWoods1692/Hydro , issues and PRs welcome.
 
-> The `Powered by Hydro` footer line was kept on purpose. Leaving a mark when you use someone else's work is basic courtesy.
+The UI still isn't all that pretty — I'll keep fiddling with it.
+
+> The `Powered by Hydro` footer line was kept on purpose. Leaving a mark when you use someone else's work is basic courtesy — and I want the same applied when others use my code.
