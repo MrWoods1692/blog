@@ -24,8 +24,10 @@ This post is about the integration — not how to use LLBot, but how to fit a co
 
 It deliberately is not a container dashboard; it splits the concepts apart:
 
-text
+```text
 Workspace
+```
+
 ├── Members / roles / per-endpoint alert subscriptions
 ├── Agent node (the machine running the agent)
 │   └── Protocol endpoint (the managed resource)
@@ -65,7 +67,7 @@ Once that is clear, the rest is implementation detail.
 
 I added packages/provider-llbot, a sibling of provider-napcat and provider-snowluma. It does three things only: declare capabilities, describe the config shape, and provide redaction.
 
-ts
+```ts
 export const llbotManifest: ProviderCapabilityManifest = {
   id: asProviderId("llbot"),
   displayName: "LLBot",
@@ -81,10 +83,12 @@ export const llbotManifest: ProviderCapabilityManifest = {
 
 
 llbotAvailability.available is false on purpose: LLBot has its own authorization mechanism and artifact verification requirements, so until those preconditions are met the provider says it is unavailable instead of quietly bringing up an uncontrolled container.
+```
+
 
 Config and credentials are separate:
 
-ts
+```ts
 // Ordinary config: plain HTTP inside its own container only
 export const LLBotConfigurationSchema = z.strictObject({
   endpointUrl: z.string().url().startsWith("http://"),
@@ -101,6 +105,8 @@ z.strictObject means one extra field throws immediately — I do not want an acc
 Redaction is recursive: redactSecrets kills whole branches by key name (token / secret / password / api_key), and URL strings have user:pass and sensitive query parameters stripped. The console can show a config summary without leaking a token back to the browser.
 
 ---
+```
+
 
 ## 4. The runtime driver: a container's lifecycle
 
@@ -108,7 +114,7 @@ The real work is apps/agent/src/llbot-runtime.ts, a standalone file that deliber
 
 ### The image is pinned to a digest
 
-ts
+```ts
 export const LLBOT_IMAGE =
   "linyuchen/llbot@sha256:6f10ce9c8848cc6a1157b4bda878d7485e25602b719448f3907de87f1bd30014";
 export const LLBOT_ARTIFACT =
@@ -116,18 +122,22 @@ export const LLBOT_ARTIFACT =
 
 
 Every command runs assertAllowed first: the image string must equal that digest exactly, and the command's approvedArtifactId has to match. latest is simply not an option.
+```
+
 
 ### Ownership is checked, not assumed from the name
 
 A container counts as this endpoint's only if three labels all match:
 
-ts
+```ts
 container.labels["botroost.workspace_id"] === command.workspaceId &&
 container.labels["botroost.endpoint_id"] === command.endpointId &&
 container.labels["botroost.provider"] === "llbot"
 
 
 Otherwise it throws LLBot container is not owned by this endpoint — it will never adopt a same-named container of unknown origin.
+```
+
 
 ### Generation fence
 
@@ -137,7 +147,7 @@ this.commands holds each endpoint's most recent command. A new command whose gen
 
 Running several endpoints in parallel, the thing that collides first is the WebUI port. This derives a deterministic offset from the first four characters of the endpoint id:
 
-ts
+```ts
 export function llbotLoginPorts(endpointId: string) {
   const offset = Number.parseInt(endpointId.slice(0, 4), 16) % 400;
   return { webuiPort: 3080 + offset };
@@ -145,10 +155,12 @@ export function llbotLoginPorts(endpointId: string) {
 
 
 Same endpoint always computes the same port; different endpoints mostly miss each other. Not perfect, but far easier to debug than random ports.
+```
+
 
 ### Resource floors
 
-ts
+```ts
 export function llbotResourceLimits(requested) {
   const cpuMillis = Math.max(1000, requested.cpuMillis);
   const memoryMiB = Math.max(1024, requested.memoryMiB);
@@ -157,16 +169,20 @@ export function llbotResourceLimits(requested) {
 
 
 Anything below 1 core / 1G gets raised — NTQQ-based software will simply fail to start with too little memory, and the error is unreadable.
+```
+
 
 One more detail: the refresh-login-qr action is explicitly unsupported for LLBot:
 
-ts
+```ts
 throw new Error("action is not supported for LLBot endpoints; complete login through the LLBot WebUI");
 
 
 On the NapCat side the QR appears in the console; LLBot's login is its own WebUI, and the console does not overstep by emulating it.
 
 ---
+```
+
 
 ## 5. Aligning the two config models
 
@@ -174,7 +190,7 @@ This was the most brain-bending part.
 
 The console's OneBot editor renders NapCat-shaped fields (websocketClients / websocketServers), but LLBot's native config looks like this:
 
-json
+```json
 {
   "ob11": {
     "enable": true,
@@ -184,6 +200,8 @@ json
     ]
   }
 }
+```
+
 
 
 So the driver adds a mapping layer that translates the editor model into LLBot's ob11.connect:
@@ -196,11 +214,13 @@ So the driver adds a mapping layer that translates the editor model into LLBot's
 
 The editor never shows a token back to the browser — only a boolean:
 
-ts
+```ts
 tokenConfigured: typeof entry.token === "string" && entry.token.length > 0,
 
 
 So what happens on write-back? Positional inheritance: if the Nth client entry carries no new token, it reuses the token from the previous entry in the same position. Nothing has to be typed in the UI, and an existing token never gets wiped by an empty string.
+```
+
 
 ### A restart is required after writing
 
@@ -211,7 +231,10 @@ LLBot reads its protocol config at startup, so after writing the file you must d
 findOneBotConfig looks for config_<qq>.json in the endpoint data directory; if it is not there it reports:
 
 
+```text
 LLBot OneBot configuration appears after QQ login; complete the login in the WebUI first
+```
+
 
 
 That is not sloppy error handling — it is the real shape of this runtime: no login, no config file. The console saying so honestly is better than writing an empty file and pretending it succeeded.
@@ -231,7 +254,7 @@ Lists over 500 entries are truncated and flagged truncated — a whole friends l
 
 There is a semantic that has to be spelled out: LLBot's OneBot HTTP service only starts listening after login. So container running but HTTP unreachable does not mean failure — it means still waiting for WebUI login. The code decides exactly that:
 
-ts
+```ts
 // LLBot only starts its OneBot HTTP server after QQ logs in, so an unreachable
 // provider while the container runs means "waiting for the WebUI login".
 return { runtime: "ready", provider: "available", protocol: "disconnected",
@@ -239,6 +262,8 @@ return { runtime: "ready", provider: "available", protocol: "disconnected",
 
 
 The WebUI port rides along in loginGuide, so the console can tell you which port to scan the QR on.
+```
+
 
 ### Traffic: counted from container logs
 
@@ -246,7 +271,7 @@ The console wants to show OneBot's send/receive rates and connection events, but
 
 LLBot's logs look like this (with ANSI colour): [收-群] / [发-群], and connection events are onebot11-adapter WebSocket 事件上报 ws://... plus 正向 WebSocket 服务已启动. The parser strips colour codes first, then classifies by regex:
 
-ts
+```ts
 export function parseLLBotTrafficLine(line: string) {
   const inbound = message.includes("[收-") || message.includes("收到");
   const outbound = message.includes("[发-") || message.includes("发送");
@@ -255,6 +280,8 @@ export function parseLLBotTrafficLine(line: string) {
 
 
 The accumulator (NapCatTrafficAccumulator, reused here with the two LLBot parsers) keeps six 10-second buckets, and reports 1-minute / 5-minute windows, the last 40 events and the last 40 connection events.
+```
+
 
 Two boundaries matter:
 

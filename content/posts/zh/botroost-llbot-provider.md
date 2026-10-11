@@ -65,7 +65,7 @@ NapCat 靠改配置文件定 OneBot 行为，LLBot 不一样——它有个正�
 
 新增了 packages/provider-llbot，跟 provider-napcat、provider-snowluma 平级。它只做三件事：声明能力、描述配置形状、提供脱敏。
 
-ts
+```ts
 export const llbotManifest: ProviderCapabilityManifest = {
   id: asProviderId("llbot"),
   displayName: "LLBot",
@@ -78,13 +78,15 @@ export const llbotManifest: ProviderCapabilityManifest = {
     "ephemeral-storage",
   ],
 };
+```
+
 
 
 注意 llbotAvailability.available 是 false——这不是漏写。LLBot 有自己的授权机制和产物校验要求，所以在这些前置条件满足之前，provider 会明确说自己不可用，而不是偷偷跑起来一个不受控的容器。
 
 配置和凭据也是分开的：
 
-ts
+```ts
 // 普通配置：只允许容器内部明文 HTTP
 export const LLBotConfigurationSchema = z.strictObject({
   endpointUrl: z.string().url().startsWith("http://"),
@@ -97,6 +99,8 @@ export const LLBotCredentialsSchema = z.strictObject({
 
 
 z.strictObject 意味着多传一个字段就直接抛错——我不希望配置里悄悄混进一个 accessToken。凭据走 provider-sdk 的 credentialEnvelope，只有框架自己包过的信封才认，裸对象会被 invalid credential envelope 挡掉。
+```
+
 
 脱敏是递归的：redactSecrets 会按 key 名（token/secret/password/api_key…）整枝砍掉，字符串里的 URL 会把 user:pass 和敏感 query 参数一并抹掉。所以控制台里能安全地展示配置摘要，不会把 token 漏回浏览器。
 
@@ -108,11 +112,13 @@ z.strictObject 意味着多传一个字段就直接抛错——我不希望配�
 
 ### 镜像固定到 digest
 
-ts
+```ts
 export const LLBOT_IMAGE =
   "linyuchen/llbot@sha256:6f10ce9c8848cc6a1157b4bda878d7485e25602b719448f3907de87f1bd30014";
 export const LLBOT_ARTIFACT =
   "artifact:llbot:linyuchen.llbot.sha256.6f10ce9c...";
+```
+
 
 
 每条命令执行前都会 assertAllowed：镜像字符串必须完全等于上面这个 digest 地址，而且命令里的 approvedArtifactId 也得对上。用 latest 是不可能的。
@@ -121,10 +127,12 @@ export const LLBOT_ARTIFACT =
 
 容器必须同时满足三个标签才被认为是这个端点的：
 
-ts
+```ts
 container.labels["botroost.workspace_id"] === command.workspaceId &&
 container.labels["botroost.endpoint_id"] === command.endpointId &&
 container.labels["botroost.provider"] === "llbot"
+```
+
 
 
 对不上就报 LLBot container is not owned by this endpoint，绝不接管一个来路不明的同名容器。
@@ -137,36 +145,42 @@ this.commands 里存着每个端点最近一次命令。新命令的 generation 
 
 并行跑多个端点时，最容易撞的就是 WebUI 端口。这里用端点 ID 前四位算一个固定偏移：
 
-ts
+```ts
 export function llbotLoginPorts(endpointId: string) {
   const offset = Number.parseInt(endpointId.slice(0, 4), 16) % 400;
   return { webuiPort: 3080 + offset };
 }
+```
+
 
 
 同一个端点每次算出来一样，不同端点大概率错开。不完美，但比随机端口好排查得多。
 
 ### 资源下限
 
-ts
+```ts
 export function llbotResourceLimits(requested) {
   const cpuMillis = Math.max(1000, requested.cpuMillis);
   const memoryMiB = Math.max(1024, requested.memoryMiB);
   return { cpuMillis, memoryMiB, memorySwapMiB: memoryMiB + 512 };
 }
+```
+
 
 
 低于 1 核 / 1G 的请求会被抬上来——LLBot 这种基于 NTQQ 的东西给太少内存会直接起不来，报错还很难看懂。
 
 另外还有个细节：refresh-login-qr 这个动作对 LLBot 明确不支持：
 
-ts
+```ts
 throw new Error("action is not supported for LLBot endpoints; complete login through the LLBot WebUI");
 
 
 NapCat 那边扫码是在控制台里出的，LLBot 的登录就是它自己的 WebUI，控制台不越权去模拟。
 
 ---
+```
+
 
 ## 五、把两种配置模型对齐
 
@@ -174,7 +188,7 @@ NapCat 那边扫码是在控制台里出的，LLBot 的登录就是它自己的 
 
 控制台的 OneBot 编辑器是按 NapCat 的字段形状渲染的（websocketClients / websocketServers），但 LLBot 的原生配置长这样：
 
-json
+```json
 {
   "ob11": {
     "enable": true,
@@ -184,6 +198,8 @@ json
     ]
   }
 }
+```
+
 
 
 所以驱动里做了一层映射，把编辑器模型翻译成 LLBot 的 ob11.connect：
@@ -196,8 +212,10 @@ json
 
 编辑器从来不把 token 回显给浏览器——只给一个布尔：
 
-ts
+```ts
 tokenConfigured: typeof entry.token === "string" && entry.token.length > 0,
+```
+
 
 
 那写回的时候怎么办？按位置继承：第 N 个客户端条目如果没有新 token，就沿用上一次同位置条目的 token。这样界面上什么都不用输，旧 token 也不会被空字符串抹掉。
@@ -211,7 +229,10 @@ LLBot 只在启动时读协议配置，所以写文件之后要 docker restart�
 findOneBotConfig 在端点数据目录里找 config_<qq>.json，找不到就报：
 
 
+```text
 LLBot OneBot configuration appears after QQ login; complete the login in the WebUI first
+```
+
 
 
 这不是错误处理写得啰嗦，而是这个运行时的真实形状：没登录就没有配置文件。控制台如实说出来，比写一个空文件假装成功要好。
@@ -231,11 +252,13 @@ LLBot OneBot configuration appears after QQ login; complete the login in the Web
 
 这里有个必须写清楚的语义：LLBot 的 OneBot HTTP 服务是登录之后才开始监听的。所以「容器 running 但 HTTP 打不通」不等于故障，等于「还在等 WebUI 登录」。代码里就是按这个判断的：
 
-ts
+```ts
 // LLBot only starts its OneBot HTTP server after QQ logs in, so an unreachable
 // provider while the container runs means "waiting for the WebUI login".
 return { runtime: "ready", provider: "available", protocol: "disconnected",
          convergence: "reconciling", metadata: { loginGuide: { webuiPort } } };
+```
+
 
 
 顺手把 WebUI 端口放进 loginGuide，控制台就能提示「去这个端口扫码」。
@@ -246,12 +269,14 @@ return { runtime: "ready", provider: "available", protocol: "disconnected",
 
 LLBot 的日志长这样（带 ANSI 颜色）：[收-群]、[发-群]，连接事件是 onebot11-adapter WebSocket 事件上报 ws://... 和 正向 WebSocket 服务已启动。解析器先把颜色码剥掉，再按正则归类：
 
-ts
+```ts
 export function parseLLBotTrafficLine(line: string) {
   const inbound = message.includes("[收-") || message.includes("收到");
   const outbound = message.includes("[发-") || message.includes("发送");
   // ...
 }
+```
+
 
 
 聚合器（NapCatTrafficAccumulator，这次复用并扩了 LLBot 的两个解析器）按 10 秒一个桶保留最近 6 个桶，给出 1 分钟 / 5 分钟窗口、最近 40 条事件和最近 40 条连接事件。
